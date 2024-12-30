@@ -17,209 +17,67 @@ const SubCategorySection = () => {
     <div className="product-container" style={{ marginTop: "20px" }}>
       <div className="overlay" data-overlay></div>
       <div className="container">
-        <div className="sidebar  has-scrollbar" data-mobile-menu>
+        {/* Sidebar for Categories (Desktop & Tablet) */}
+        <div className="sidebar has-scrollbar category-sidebar">
           <div className="sidebar-category">
             <div className="sidebar-top">
               <h2 className="sidebar-title">Category</h2>
-
-              <button className="sidebar-close-btn" data-mobile-menu-close-btn>
-                <ion-icon name="close-outline"></ion-icon>
-              </button>
             </div>
 
             <ul className="sidebar-menu-category-list">
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/dress.svg"
-                      alt="clothes"
-                      width="20"
-                      height="20"
-                      className="menu-title-img"
-                    />
-
-                    <p className="menu-title">Clothes</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/shoes.svg"
-                      alt="footwear"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Footwear</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/jewelry.svg"
-                      alt="clothes"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Jewelry</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/perfume.svg"
-                      alt="perfume"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Perfume</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/cosmetics.svg"
-                      alt="cosmetics"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Cosmetics</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/glasses.svg"
-                      alt="glasses"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Glasses</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
-
-              <li className="sidebar-menu-category">
-                <button className="sidebar-accordion-menu" data-accordion-btn>
-                  <div className="menu-title-flex">
-                    <img
-                      src="../assets/images/icons/bag.svg"
-                      alt="bags"
-                      className="menu-title-img"
-                      width="20"
-                      height="20"
-                    />
-
-                    <p className="menu-title">Bags</p>
-                  </div>
-
-                  <div>
-                    <ion-icon
-                      name="add-outline"
-                      className="add-icon"
-                    ></ion-icon>
-                    <ion-icon
-                      name="remove-outline"
-                      className="remove-icon"
-                    ></ion-icon>
-                  </div>
-                </button>
-              </li>
+              {[
+                { name: "Clothes", icon: "dress" },
+                { name: "Footwear", icon: "shoes" },
+                { name: "Jewelry", icon: "jewelry" },
+                { name: "Perfume", icon: "perfume" },
+                { name: "Cosmetics", icon: "cosmetics" },
+                { name: "Glasses", icon: "glasses" },
+                { name: "Bags", icon: "bag" },
+              ].map((category, index) => (
+                <li className="sidebar-menu-category" key={index}>
+                  <button className="sidebar-accordion-menu">
+                    <div className="menu-title-flex">
+                      <img
+                        src={`../assets/images/icons/${category.icon}.svg`}
+                        alt={category.name}
+                        width="20"
+                        height="20"
+                        className="menu-title-img"
+                      />
+                      <p className="menu-title">{category.name}</p>
+                    </div>
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
+        {/* Category Section (Mobile) */}
+        <div className="category-section">
+          <ul className="category-list">
+            {[
+              { name: "Clothes", icon: "dress" },
+              { name: "Footwear", icon: "shoes" },
+              { name: "Jewelry", icon: "jewelry" },
+              { name: "Perfume", icon: "perfume" },
+              { name: "Cosmetics", icon: "cosmetics" },
+              { name: "Glasses", icon: "glasses" },
+              { name: "Bags", icon: "bag" },
+            ].map((category, index) => (
+              <li key={index} className="category-item">
+                <img
+                  src={`../assets/images/icons/${category.icon}.svg`}
+                  alt={category.name}
+                  className="category-icon"
+                />
+                <p className="category-name">{category.name}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Main Product Section */}
         <div className="product-box">
           <div className="product-main">
             <h2 className="title">Sub Category Product</h2>
@@ -274,6 +132,75 @@ const SubCategorySection = () => {
           </div>
         </div>
       </div>
+
+      {/* Styling */}
+      <style jsx>{`
+        /* Sidebar for Desktop & Tablet */
+        .category-sidebar {
+          display: none;
+        }
+
+        /* Mobile Category Section */
+        .category-section {
+          display: flex;
+          overflow-x: auto;
+          white-space: nowrap;
+          padding: 10px 0;
+          margin-bottom: 20px;
+          background-color: #f9f9f9;
+        }
+
+        .category-list {
+          display: flex;
+          gap: 15px;
+          padding: 0 10px;
+          list-style: none;
+        }
+
+        .category-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          min-width: 80px;
+        }
+
+        .category-icon {
+          width: 40px;
+          height: 40px;
+          margin-bottom: 5px;
+        }
+
+        .category-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+        }
+
+        .category-section::-webkit-scrollbar {
+          display: none; /* Hide scrollbar */
+        }
+
+        .product-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+          .category-sidebar {
+            display: block; /* Sidebar visible on tablet and desktop */
+          }
+
+          .category-section {
+            display: none; /* Hide mobile category section on larger screens */
+          }
+
+          .product-grid {
+            grid-template-columns: repeat(4, 1fr); /* Adjust for desktop */
+          }
+        }
+      `}</style>
     </div>
   );
 };
