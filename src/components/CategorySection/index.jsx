@@ -5,10 +5,30 @@ const CategorySection = () => {
   const navigate = useNavigate();
 
   const categories = [
-    { id: "1", title: "Dress & Frock", image: "./assets/images/icons/dress.svg", amount: 53 },
-    { id: "2", title: "Shoes & Sandals", image: "./assets/images/icons/shoes.svg", amount: 42 },
-    { id: "3", title: "Bags & Wallets", image: "./assets/images/icons/bag.svg", amount: 36 },
-    { id: "4", title: "Accessories", image: "./assets/images/icons/dress.svg", amount: 25 },
+    {
+      id: "1",
+      title: "Dress & Frock",
+      image: "./assets/images/icons/dress.svg",
+      amount: 53,
+    },
+    {
+      id: "2",
+      title: "Shoes & Sandals",
+      image: "./assets/images/icons/shoes.svg",
+      amount: 42,
+    },
+    {
+      id: "3",
+      title: "Bags & Wallets",
+      image: "./assets/images/icons/bag.svg",
+      amount: 36,
+    },
+    {
+      id: "4",
+      title: "Accessories",
+      image: "./assets/images/icons/dress.svg",
+      amount: 25,
+    },
   ];
 
   const handleClick = (categoryId) => {
@@ -22,11 +42,7 @@ const CategorySection = () => {
           {categories.map((category) => (
             <div className="category-item" key={category.id}>
               <div className="category-img-box">
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  width="30"
-                />
+                <img src={category.image} alt={category.title} width="30" />
               </div>
 
               <div className="category-content-box">

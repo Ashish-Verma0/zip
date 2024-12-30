@@ -200,6 +200,19 @@ const SubCategorySection = () => {
             grid-template-columns: repeat(4, 1fr); /* Adjust for desktop */
           }
         }
+
+        @media (min-width: 600px) and (max-width: 1024px) {
+          /* Adjust styles specifically for iPads */
+          .category-section {
+            display: flex; /* Show mobile category section on iPads */
+          }
+          .category-sidebar {
+            display: block; /* Show sidebar on iPads */
+          }
+          .product-grid {
+            grid-template-columns: repeat(3, 1fr); /* Adjust for iPad */
+          }
+        }
       `}</style>
     </div>
   );

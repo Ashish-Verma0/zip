@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import adiShakti from "../../images/adiShakti.png"
+import adiShakti from "../../images/adiShakti.png";
 const NavBar = () => {
   const navigate = useNavigate();
   const handleClickProfile = () => {
@@ -14,16 +14,24 @@ const NavBar = () => {
   };
 
   return (
-    <header>
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        width: "100%",
+        zIndex: 999999998,
+        backgroundColor: "white",
+        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <div className="header-main">
         <div className="container">
-          <div className="header-logo" onClick={()=>navigate("/")} style={{cursor:"pointer"}}>
-            <img
-              src={adiShakti}
-              alt="Anon's logo"
-              width="190"
-              height="36"
-            />
+          <div
+            className="header-logo"
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
+            <img src={adiShakti} alt="Anon's logo" width="190" height="36" />
           </div>
           <div className="header-search-container">
             <input

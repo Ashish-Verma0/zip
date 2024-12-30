@@ -1,22 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const PopularProduct = () => {
-  // Dummy products array
-  const dummyProducts = Array.from({ length: 15 }, (_, index) => ({
+const RelevantSection = () => {
+  const dummyProducts = Array.from({ length: 30 }, (_, index) => ({
     id: index + 1,
     title: `Product ${index + 1}`,
     category: `Category ${(index % 5) + 1}`,
-    image: "./assets/images/products/jacket-3.jpg",
-    hoverImage: "./assets/images/products/jacket-4.jpg",
+    image: "../assets/images/products/jacket-3.jpg",
+    hoverImage: "../assets/images/products/jacket-4.jpg",
+    // image: "../assets/images/products/image1.png",
+    // hoverImage: "../assets/images/products/image2.png",
     price: `$${(Math.random() * 100).toFixed(2)}`,
-    oldPrice: `$${(Math.random() * 150 + 100).toFixed(2)}`,
+    oldPrice: `$${(Math.random() * 150).toFixed(2)}`,
     discount: `${Math.floor(Math.random() * 30) + 5}%`,
     rating: Math.floor(Math.random() * 5) + 1,
   }));
+
   const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/detail");
+  };
   return (
-    <div className="product-container" style={{ marginTop: "20px" }}>
+    <div
+      className="product-container"
+      style={{
+        marginTop: "20px",
+      }}
+    >
       <div className="overlay" data-overlay></div>
       <div className="container">
         {/* Main Product Section */}
@@ -141,4 +152,4 @@ const PopularProduct = () => {
   );
 };
 
-export default PopularProduct;
+export default RelevantSection;
