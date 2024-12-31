@@ -13,7 +13,7 @@ const HomePage = () => {
         <PosterCard />
         <CategorySection />
         <PopularProduct />
-        <ServicesSection />
+        {/* <ServicesSection /> */}
       </main>
     </div>
   );

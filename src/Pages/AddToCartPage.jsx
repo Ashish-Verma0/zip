@@ -10,28 +10,52 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-// import "./AddToCart.css";
+import { getOneFetchByUrl } from "../api/Api";
 
 const CartPage = () => {
   const navigate = useNavigate();
+
+  const [cartItems, setCartItems] = useState(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+
   const handleClickToBilling = () => {
-    navigate(`/billing`);
+    if (cartItems.length) navigate(`/billing`);
+    alert("No Item Added");
   };
 
-  // Dummy data for cart items
-  const dummyCartItems = Array.from({ length: 5 }, (_, index) => ({
-    id: index + 1,
-    title: `Product ${index + 1}`,
-    price: (Math.random() * 100).toFixed(2),
-    stock: Math.floor(Math.random() * 10) + 1,
-    quantity: 1,
-    desc: `Description for Product ${index + 1}`,
-    productimage: [
-      { filename: `../assets/images/products/jacket-${(index % 3) + 1}.jpg` },
-    ],
-  }));
+  useEffect(() => {
+    const validateCartStock = async () => {
+      const validatedCart = await Promise.all(
+        cartItems.map(async (item) => {
+          const response = await getOneFetchByUrl(
+            `${process.env.REACT_APP_API_URL_LOCAL}/product/productDetail?productId=${item?.id}`
+          );
 
-  const [cartItems, setCartItems] = useState(dummyCartItems);
+          const { stock } = response?.data[0];
+
+          if (stock === 0) {
+            alert(
+              `The product "${item?.title}" is out of stock and has been removed.`
+            );
+            return null;
+          }
+          if (item?.quantity > stock) {
+            alert(
+              `The quantity for "${item?.title}" has been updated to the available stock (${stock}).`
+            );
+            return { ...item, quantity: stock };
+          }
+          return item;
+        })
+      );
+
+      setCartItems(validatedCart?.filter(Boolean));
+    };
+
+    validateCartStock();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -69,121 +93,162 @@ const CartPage = () => {
       <Box className="content">
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            {cartItems?.map((elem) => {
-              return (
-                <Card
-                  key={elem.id}
-                  sx={{
-                    maxWidth: 850,
-                    margin: "20px auto",
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    p: 2,
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: { xs: "column", md: "row" },
-                    gap: "20px",
-                  }}
-                >
-                  <img
-                    src={elem.productimage[0].filename}
-                    alt="Product"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
+            {/* <Typography
+              variant="h5"
+              gutterBottom
+              style={{ margin: "0 0 0 65px" }}
+            >
+              Product Details
+            </Typography> */}
+            {cartItems?.length ? (
+              cartItems?.map((elem) => {
+                console.log("elem", elem);
+                return (
+                  <Card
+                    key={elem.id}
+                    sx={{
+                      maxWidth: 850,
+                      margin: "20px auto",
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      p: 2,
                     }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontSize: { xs: "18px", sm: "20px" },
-                        fontWeight: 600,
-                        color: "#333",
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        gap: "24px",
+                        alignItems: "center",
                       }}
                     >
-                      {elem.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: { xs: "14px", sm: "16px" },
-                        color: "gray",
-                        marginTop: "10px",
-                      }}
-                    >
-                      {elem.desc}
-                    </Typography>
-                    <div style={{ marginTop: "20px" }}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontSize: { xs: "16px", sm: "18px" },
-                          color: "#d32f2f",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ₹{elem.price}
-                      </Typography>
-
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontSize: { xs: "14px", sm: "16px" },
-                          color: "gray",
-                        }}
-                      >
-                        Delivery in Few Minutes |{" "}
-                        <span style={{ color: "green" }}>Free</span>
-                      </Typography>
-                      <div
+                      <img
+                        src={
+                          elem?.productimage[0]?.filename?.startsWith("https")
+                            ? elem?.productimage[0]?.filename
+                            : `${process.env.REACT_APP_API_URL_LOCAL}/${elem?.productimage[0]?.filename}`
+                        }
+                        alt="Product"
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          marginTop: "16px",
+                          flex: "0 0 150px",
+                          width: "150px",
+                          height: "170px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
                         }}
-                      >
-                        <button
-                          onClick={() => updateQuantity(elem.id, -1)}
+                      />
+                      <div style={{ flex: "1" }}>
+                        <h3
                           style={{
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "5px",
-                            border: "1px solid #ddd",
+                            margin: "5px 0 20px 0",
                             fontSize: "20px",
-                            cursor: "pointer",
-                            backgroundColor: "#f4f4f4",
+                            fontWeight: "600",
+                            color: "#333",
                           }}
                         >
-                          -
-                        </button>
-                        <span>{elem.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(elem.id, 1)}
+                          {elem?.title}
+                        </h3>
+                        <p
                           style={{
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "5px",
-                            border: "1px solid #ddd",
-                            fontSize: "20px",
-                            cursor: "pointer",
-                            backgroundColor: "#f4f4f4",
+                            margin: "5px 0 0 0",
+                            fontSize: "16px",
+                            color: "grey",
                           }}
                         >
-                          +
-                        </button>
+                          {elem?.desc}
+                        </p>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div>
+                            <p
+                              style={{
+                                margin: "20px 0",
+                                fontSize: "16px",
+                                color: "#d32f2f",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              ₹{elem?.price}
+                            </p>
+                            <p
+                              style={{
+                                margin: "15px 0",
+                                fontSize: "14px",
+                                color: "#555",
+                              }}
+                            >
+                              Delivery in Few Minutes |{" "}
+                              <span
+                                style={{ color: "green", fontWeight: "bold" }}
+                              >
+                                Free
+                              </span>
+                            </p>
+                          </div>
+                          <div style={{ marginRight: "40px" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginTop: "24px",
+                                flexWrap: "wrap",
+                                gap: "16px",
+                              }}
+                            >
+                              <button
+                                onClick={() => updateQuantity(elem?.id, -1)}
+                                style={{
+                                  border: "1px solid #ddd",
+                                  borderRadius: "5%",
+                                  width: "40px",
+                                  height: "40px",
+                                  backgroundColor: "#f4f4f4",
+                                  fontSize: "18px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                -
+                              </button>
+                              <span>{elem?.quantity}</span>
+                              <button
+                                onClick={() => updateQuantity(elem?.id, 1)}
+                                style={{
+                                  border: "1px solid #ddd",
+                                  borderRadius: "5%",
+                                  width: "40px",
+                                  height: "40px",
+                                  backgroundColor: "#f4f4f4",
+                                  fontSize: "18px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              })
+            ) : (
+              <Typography
+                variant="h5"
+                gutterBottom
+                style={{ margin: "0 0 0 65px" }}
+              >
+                No Products
+              </Typography>
+            )}
           </Grid>
 
-          {/* Price Summary */}
           <Grid
             item
             xs={12}
@@ -205,11 +270,11 @@ const CartPage = () => {
               gutterBottom
               sx={{
                 fontFamily: "'Arial', sans-serif",
-                fontSize: { xs: "18px", sm: "22px" },
+                fontSize: "22px",
                 marginBottom: "16px",
               }}
             >
-              Price Details ({cartItems.length} Items)
+              Price Details ({cartItems?.length} Items)
             </Typography>
             <Paper
               className="price-details-paper"
@@ -220,11 +285,13 @@ const CartPage = () => {
                 sx={{
                   mb: 2,
                   fontFamily: "'Arial', sans-serif",
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontSize: "16px",
                 }}
               >
                 <span>Actual Product Price:</span>
-                <span>₹{Math.floor(total)}</span>
+                <span>
+                  ₹{Math.floor(total * process.env.REACT_APP_DISCOUN_MULTIPLE)}
+                </span>
               </Typography>
 
               <Typography
@@ -233,34 +300,56 @@ const CartPage = () => {
                 sx={{
                   mb: 2,
                   fontFamily: "'Arial', sans-serif",
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontSize: "16px",
                 }}
               >
                 <span>Discounts:</span>
-                <span>- ₹{(total * 0.1).toFixed(2)}</span>
+                <span>
+                  - ₹
+                  {Math.floor(
+                    total * process.env.REACT_APP_DISCOUN_MULTIPLE - total
+                  )}
+                </span>
               </Typography>
 
               <Typography
                 className="price-details-typography"
                 sx={{
+                  mb: 2,
                   fontFamily: "'Arial', sans-serif",
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontSize: "16px",
                 }}
               >
-                <span>Total Payable:</span>
-                <span>₹{(total - total * 0.1).toFixed(2)}</span>
+                <span>Total Product Price:</span>
+                <span>₹{total}</span>
               </Typography>
-
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-                onClick={handleClickToBilling}
+              <hr />
+              <Typography
+                className="price-details-bold"
+                sx={{
+                  mb: 2,
+                  fontFamily: "'Arial', sans-serif",
+                  fontSize: "18px",
+                }}
               >
-                Proceed to Billing
-              </Button>
+                <span>Order Total:</span>
+                <span>₹{total}</span>
+              </Typography>
             </Paper>
+            <Button
+              variant="contained"
+              color="primary"
+              className="continue-button"
+              sx={{
+                width: "100%",
+                mt: 3,
+                fontFamily: "'Arial', sans-serif",
+                fontSize: "16px",
+              }}
+              onClick={handleClickToBilling}
+            >
+              Continue
+            </Button>
           </Grid>
         </Grid>
       </Box>

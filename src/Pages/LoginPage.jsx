@@ -56,7 +56,7 @@ const LoginPage = () => {
 
     setData({ ...data, [name]: value });
 
-    if (error) setError(""); // Clear error message on input change
+    if (error) setError("");
   };
 
   const handleLogin = (e) => {
@@ -74,7 +74,7 @@ const LoginPage = () => {
   return (
     <div
       sx={{
-        height: "79.7vh",
+        height: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

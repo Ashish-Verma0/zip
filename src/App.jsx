@@ -13,25 +13,48 @@ import ProfilePage from "./Pages/ProfilePage";
 import ProductDetailPage from "./Pages/ProductDetailPage";
 import MyOrdersPage from "./Pages/MyOrderPage";
 import LoginPage from "./Pages/LoginPage";
+import BillingPage from "./Pages/BillingPage";
+import OrderDetailPage from "./Pages/OrderDetailPage";
+import SearchResults from "./components/SearchResults";
 
 function App() {
+  const tokenData = localStorage.getItem("tokenData");
+  const token = JSON.parse(tokenData);
   return (
     <>
-      <NavBar />
-
-      <Routes>
-        <Route exact path="/" element={<HomePage />} />
-        <Route exact path="/sub/:category" element={<SubCategorySection />} />
-        <Route exact path="/Add" element={<AddToCartPage />} />
-        <Route exact path="/myOrder" element={<MyOrderPage />} />
-        <Route exact path="/profile" element={<ProfilePage />} />
-        {/* <Route exact path="/relevant" element={<RelevantSection />} /> */}
-        <Route exact path="/detail" element={<ProductDetailPage />} />
-        <Route exact path="/add" element={<AddToCartPage />} />
-        <Route exact path="/orders" element={<MyOrdersPage />} />
-        <Route exact path="/login" element={<LoginPage />} />
-      </Routes>
-      <FooterSection />
+      {token?.length > 5 ? (
+        <>
+          <NavBar />
+          <Routes>
+            <Route exact path="*" element={<HomePage />} />
+            <Route exact path="/" element={<HomePage />} />
+            <Route
+              exact
+              path="/sub/:category"
+              element={<SubCategorySection />}
+            />
+            <Route exact path="/myOrder" element={<MyOrderPage />} />
+            <Route exact path="/profile" element={<ProfilePage />} />
+            <Route exact path="/detail/:id" element={<ProductDetailPage />} />
+            <Route exact path="/add" element={<AddToCartPage />} />
+            <Route exact path="/orders" element={<MyOrdersPage />} />
+            <Route
+              exact
+              path="/order-detail/:id"
+              element={<OrderDetailPage />}
+            />
+            <Route exact path="/billing" element={<BillingPage />} />
+            <Route exact path="/search" element={<SearchResults />} />
+          </Routes>
+          <FooterSection />
+        </>
+      ) : (
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="*" element={<LoginPage />} />
+          <Route exact path="/login" element={<LoginPage />} />
+        </Routes>
+      )}
     </>
   );
 }

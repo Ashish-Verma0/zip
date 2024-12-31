@@ -1,28 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adiShakti from "../../images/adiShakti.png";
+import { Button, Drawer } from "@mui/material";
 const NavBar = () => {
   const navigate = useNavigate();
   const handleClickProfile = () => {
     navigate("/profile");
   };
   const handleClickAddToCart = () => {
-    navigate("/Add");
+    navigate("/add");
   };
   const handleClickMyOrder = () => {
     navigate("/myOrder");
   };
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (event) => {
+    if (event.key === "Enter" && searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setMobileSearchOpen(false); // Close mobile search on submission
+    }
+  };
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const closeSidebarAndNavigate = (path) => {
+    setIsSidebarOpen(false); // Close the sidebar
+    navigate(path); // Navigate to the specified path
+  };
   return (
     <header
-      style={{
-        position: "sticky",
-        top: 0,
-        width: "100%",
-        zIndex: 999999998,
-        backgroundColor: "white",
-        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-      }}
+    // style={{
+    //   position: "sticky",
+    //   top: 0,
+    //   width: "100%",
+    //   zIndex: 999999998,
+    //   backgroundColor: "white",
+    //   boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+    // }}
     >
       <div className="header-main">
         <div className="container">
@@ -39,6 +58,9 @@ const NavBar = () => {
               name="search"
               className="search-field"
               placeholder="Enter your product name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
             />
             <button className="search-btn">
               <ion-icon name="search-outline"></ion-icon>
@@ -59,25 +81,68 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      <div className="mobile-bottom-navigation">
-        <button className="action-btn" data-mobile-menu-open-btn>
-          <ion-icon name="menu-outline"></ion-icon>
-        </button>
-        <button className="action-btn">
-          <ion-icon name="bag-handle-outline"></ion-icon>
-          <span className="count">0</span>
-        </button>
-        <button className="action-btn">
-          <ion-icon name="home-outline"></ion-icon>
-        </button>
-        <button className="action-btn">
-          <ion-icon name="heart-outline"></ion-icon>
-          <span className="count">0</span>
-        </button>
-        <button className="action-btn" data-mobile-menu-open-btn>
-          <ion-icon name="grid-outline"></ion-icon>
-        </button>
+
+      <div>
+        {/* Mobile Bottom Navigation */}
+        <div className="mobile-bottom-navigation">
+          <button
+            className="action-btn"
+            data-mobile-menu-open-btn
+            onClick={toggleSidebar}
+          >
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+          <button className="action-btn" onClick={() => navigate("/orders")}>
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span className="count">0</span>
+          </button>
+          <button className="action-btn" onClick={() => navigate("/")}>
+            <ion-icon name="home-outline"></ion-icon>
+          </button>
+          <button className="action-btn" onClick={() => navigate("/add")}>
+            <ion-icon name="heart-outline"></ion-icon>
+            <span className="count">0</span>
+          </button>
+          <button
+            className="action-btn"
+            data-mobile-menu-open-btn
+            onClick={() => navigate("/profile")}
+          >
+            <ion-icon name="grid-outline"></ion-icon>
+          </button>
+        </div>
+
+        {/* Sidebar using Material UI Drawer */}
+        <Drawer
+          anchor="left"
+          open={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        >
+          <div
+            role="presentation"
+            onClick={() => setIsSidebarOpen(false)} // Close sidebar when clicking inside
+            onKeyDown={() => setIsSidebarOpen(false)}
+            style={{ width: 250, padding: 20 }}
+          >
+            <Button
+              fullWidth
+              onClick={() => closeSidebarAndNavigate("/aboutus")}
+              variant="outlined"
+              style={{ marginBottom: "10px" }}
+            >
+              About Us
+            </Button>
+            <Button
+              fullWidth
+              onClick={() => closeSidebarAndNavigate("/contactus")}
+              variant="outlined"
+            >
+              Contact Us
+            </Button>
+          </div>
+        </Drawer>
       </div>
+
       <nav className="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
         <div className="menu-top">
           <h2 className="menu-title">Menu</h2>
