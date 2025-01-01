@@ -188,11 +188,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
   const [sortOption, setSortOption] = useState("default");
-  const [isError, setIsError] = useState(false); // Track errors
+  const [isError, setIsError] = useState(false);
   const loaderRef = useRef(null);
   const location = useLocation();
+  console.log("subCategoryDataa", subCategoryDataa, subCategory);
 
-  // Fetch products function
   const fetchProducts = async ({ pageParam = 1 }) => {
     try {
       if (!subCategory?.id || !subCategoryDataa?.id) {
@@ -201,15 +201,14 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
       const response = await getOneFetchByUrl(
         `${process.env.REACT_APP_API_URL_LOCAL}/product/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryId=${subCategory.id}&subcategoryId=${subCategoryDataa.id}&page=${pageParam}`
       );
-      return response?.data;
+      return response?.data || [];
     } catch (error) {
       console.error("Error fetching products:", error.message);
       setIsError(true);
-      return { products: [], pagination: { currentPage: 1, totalPages: 1 } }; // Return empty data
+      return { products: [], pagination: { currentPage: 1, totalPages: 1 } };
     }
   };
 
-  // UseInfiniteQuery for infinite scrolling
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ["products", subCategory?.id, subCategoryDataa?.id],
@@ -221,7 +220,7 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
           : undefined;
       },
       staleTime: 35 * 60 * 1000,
-      enabled: !!subCategory?.id && !!subCategoryDataa?.id, // Enable only when IDs are valid
+      enabled: !!subCategory?.id && !!subCategoryDataa?.id,
     });
 
   useEffect(() => {
@@ -275,7 +274,7 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
         <h2 className="title">Sub Category Product</h2>
 
         <div className="product-grid">
-          {sortedProducts.map((product) => (
+          {sortedProducts?.map((product) => (
             <div
               key={product?.id}
               className="showcase"

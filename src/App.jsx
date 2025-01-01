@@ -16,6 +16,9 @@ import LoginPage from "./Pages/LoginPage";
 import BillingPage from "./Pages/BillingPage";
 import OrderDetailPage from "./Pages/OrderDetailPage";
 import SearchResults from "./components/SearchResults";
+import SignUpPage from "./Pages/SignUpPage";
+import ForgetPassword from "./Pages/ForgetPassword";
+import EmailVerifyPage from "./Pages/EmailVerifyPage";
 
 function App() {
   const tokenData = localStorage.getItem("tokenData");
@@ -53,6 +56,13 @@ function App() {
           <Route exact path="/" element={<HomePage />} />
           <Route exact path="*" element={<LoginPage />} />
           <Route exact path="/login" element={<LoginPage />} />
+          <Route exact path="/signup" element={<SignUpPage />} />
+          <Route
+            exact
+            path="/forgot-password/:token"
+            element={<ForgetPassword />}
+          />
+          <Route exact path="/email-verify" element={<EmailVerifyPage />} />
         </Routes>
       )}
     </>

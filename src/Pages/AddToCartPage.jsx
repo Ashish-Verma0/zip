@@ -21,7 +21,11 @@ const CartPage = () => {
   });
 
   const handleClickToBilling = () => {
-    if (cartItems.length) navigate(`/billing`);
+    if (cartItems.length) {
+      navigate(`/billing`);
+      return;
+    }
+
     alert("No Item Added");
   };
 

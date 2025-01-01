@@ -5,11 +5,11 @@ const FooterSection = () => {
     <footer>
       <div className="footer-bottom">
         <div className="container">
-          <img
+          {/* <img
             src="./assets/images/payment.png"
             alt="payment method"
             className="payment-img"
-          />
+          /> */}
 
           <p className="copyright">
             Copyright &copy; <a href="#">Globel Info Tech</a> all rights

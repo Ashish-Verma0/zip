@@ -71,12 +71,12 @@ const NavBar = () => {
               <ion-icon name="person-outline"></ion-icon>
             </button>
             <button className="action-btn" onClick={handleClickAddToCart}>
-              <ion-icon name="heart-outline"></ion-icon>
-              <span className="count">0</span>
+              <ion-icon name="cart-outline"></ion-icon>
+              {/* <span className="count">0</span> */}
             </button>
             <button className="action-btn" onClick={handleClickMyOrder}>
               <ion-icon name="bag-handle-outline"></ion-icon>
-              <span className="count">0</span>
+              {/* <span className="count">0</span> */}
             </button>
           </div>
         </div>
@@ -94,14 +94,14 @@ const NavBar = () => {
           </button>
           <button className="action-btn" onClick={() => navigate("/orders")}>
             <ion-icon name="bag-handle-outline"></ion-icon>
-            <span className="count">0</span>
+            {/* <span className="count">0</span> */}
           </button>
           <button className="action-btn" onClick={() => navigate("/")}>
             <ion-icon name="home-outline"></ion-icon>
           </button>
           <button className="action-btn" onClick={() => navigate("/add")}>
-            <ion-icon name="heart-outline"></ion-icon>
-            <span className="count">0</span>
+            <ion-icon name="cart-outline"></ion-icon>
+            {/* <span className="count">0</span> */}
           </button>
           <button
             className="action-btn"
