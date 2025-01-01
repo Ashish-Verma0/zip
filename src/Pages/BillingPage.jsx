@@ -569,7 +569,7 @@ const BillingPage = () => {
                     />
                     <Box sx={{ flex: 1, ml: 2 }}>
                       <Typography variant="subtitle2" fontWeight="bold" noWrap>
-                        {item?.name || "Unknown Product"}
+                        {item?.title || "Unknown Product"}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Qty: {item?.quantity || 0}

@@ -172,7 +172,7 @@
 
 // export default SubCategorySection;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -191,7 +191,6 @@ const SubCategorySection = () => {
     try {
       const url = `${process.env.REACT_APP_API_URL_LOCAL}/subcategory/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryName=${subCategory?.categoryName}`;
       const response = await getFetch(url);
-      setSubCategoryDataa(response?.data?.data?.[0] || {});
       return response?.data?.data || [];
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -210,6 +209,11 @@ const SubCategorySection = () => {
     staleTime: 35 * 60 * 1000,
   });
 
+  // useEffect(() => {
+  //   if (subCategories.length > 0) {
+  //     setSubCategoryDataa(subCategories[0] || {});
+  //   }
+  // }, []);
   // Fallback UI for loading, error, or no data
   if (isLoading) {
     return <div className="fallback-message">Loading subcategories...</div>;
@@ -275,7 +279,7 @@ const SubCategorySection = () => {
         {/* Category Section (Mobile) */}
         <div className="category-section">
           <ul className="category-list">
-            {subCategories.map((category, index) => (
+            {subCategories?.map((category, index) => (
               <li key={index} className="category-item">
                 <img
                   src={`${process.env.REACT_APP_API_URL_LOCAL}/${
