@@ -115,10 +115,26 @@ const PopularProduct = () => {
                         </p>
                       </div>
 
-                      <div className="showcase-content">
+                      <div
+                        className="showcase-content"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
                         {product.category.categoryName}
 
-                        <h3 className="showcase-title">{product.title}</h3>
+                        <h3
+                          className="showcase-title"
+                          style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {product.title}
+                        </h3>
 
                         <div className="showcase-rating">
                           {Array.from({ length: 5 }, (_, starIndex) => (
@@ -145,19 +161,7 @@ const PopularProduct = () => {
             )}
           </div>
         </div>
-
-        {isFetchingNextPage && (
-          <Typography
-            variant="body2"
-            align="center"
-            color="textSecondary"
-            mt={2}
-          >
-            Loading more products...
-          </Typography>
-        )}
       </div>
-
       <style jsx>{`
         .product-grid {
           display: grid;
@@ -179,7 +183,6 @@ const PopularProduct = () => {
 
         .showcase-banner {
           position: relative;
-          width: 100%;
           height: 200px;
           display: flex;
           justify-content: center;
@@ -190,7 +193,6 @@ const PopularProduct = () => {
         }
 
         .product-img {
-          width: 100%;
           height: 100%;
           object-fit: contain;
           transition: transform 0.3s ease-in-out;
@@ -212,8 +214,7 @@ const PopularProduct = () => {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-          width: 100%;
-          height: 200px; /* Adjust as needed */
+          height: 200px;
         }
 
         .product-img {

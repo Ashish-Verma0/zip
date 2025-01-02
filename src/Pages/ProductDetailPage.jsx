@@ -124,9 +124,9 @@ const ProductDetailPage = () => {
   return (
     <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
       <Grid container style={{ padding: 20 }} spacing={2}>
-        <Grid item lg={12}>
+        <Grid item lg={12} sm={12} xs={12}>
           <ProductDetails
-          quantity={quantity}
+            quantity={quantity}
             productDetail={productDetail}
             decrementQuantity={decrementQuantity}
             incrementQuantity={incrementQuantity}

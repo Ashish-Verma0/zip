@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFetch } from "../../api/Api";
 import { StoreContext } from "../../useContext/Context";
+import Skeleton from "@mui/material/Skeleton"; // Import Skeleton from MUI
 
 const CategorySection = () => {
   const navigate = useNavigate();
@@ -31,7 +32,26 @@ const CategorySection = () => {
     <div className="category">
       <div className="container">
         <div className="category-item-container has-scrollbar">
-          {categories.length ? (
+          {isLoading ? (
+            <>
+              {[...Array(4)].map((_, index) => (
+                <div className="category-item" key={index}>
+                  <div className="category-img-box">
+                    <Skeleton variant="rectangular" width={30} height={30} />
+                  </div>
+
+                  <div className="category-content-box">
+                    <div className="category-content-flex">
+                      <Skeleton variant="text" width={150} />
+                    </div>
+                    <div className="category-btn">
+                      <Skeleton variant="text" width={100} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
             categories.map((category) => (
               <div className="category-item" key={category.id}>
                 <div className="category-img-box">
@@ -44,9 +64,7 @@ const CategorySection = () => {
 
                 <div className="category-content-box">
                   <div className="category-content-flex">
-                    <h3 className="category-item-title">
-                      {category.categoryName}
-                    </h3>
+                    <h3 className="category-item-title">{category.categoryName}</h3>
                     <p className="category-item-amount">({category.amount})</p>
                   </div>
 
@@ -60,8 +78,6 @@ const CategorySection = () => {
                 </div>
               </div>
             ))
-          ) : (
-            <> No Categories Found</>
           )}
         </div>
       </div>
