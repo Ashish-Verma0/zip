@@ -195,13 +195,23 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
 
   const fetchProducts = async ({ pageParam = 1 }) => {
     try {
-      if (!subCategory?.id || !subCategoryDataa?.id) {
+      if (!subCategory?.id) {
         throw new Error("Missing subCategory or subCategoryDataa IDs");
       }
-      const response = await getOneFetchByUrl(
-        `${process.env.REACT_APP_API_URL_LOCAL}/product/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryId=${subCategory.id}&subcategoryId=${subCategoryDataa.id}&page=${pageParam}`
-      );
-      return response?.data || [];
+
+      if (subCategory?.id) {
+        const response = await getOneFetchByUrl(
+          `${process.env.REACT_APP_API_URL_LOCAL}/product/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryId=${subCategory?.id}&page=${pageParam}`
+        );
+        return response?.data || [];
+      }
+
+      if (subCategory?.id && subCategoryDataa?.id) {
+        const response = await getOneFetchByUrl(
+          `${process.env.REACT_APP_API_URL_LOCAL}/product/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryId=${subCategory?.id}&subcategoryId=${subCategoryDataa?.id}&page=${pageParam}`
+        );
+        return response?.data || [];
+      }
     } catch (error) {
       console.error("Error fetching products:", error.message);
       setIsError(true);
@@ -220,7 +230,7 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
           : undefined;
       },
       staleTime: 35 * 60 * 1000,
-      enabled: !!subCategory?.id && !!subCategoryDataa?.id,
+      enabled: !!subCategory?.id || !!subCategoryDataa?.id,
     });
 
   useEffect(() => {
@@ -245,10 +255,10 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
   const products = data?.pages?.flatMap((page) => page?.products) || [];
 
   const sortedProducts = [...products]?.sort((a, b) => {
-    if (sortOption === "priceLowHigh") return a.price - b.price;
-    if (sortOption === "priceHighLow") return b.price - a.price;
-    if (sortOption === "rating") return b.rating - a.rating;
-    if (sortOption === "name") return a.title.localeCompare(b.title);
+    if (sortOption === "priceLowHigh") return a?.price - b?.price;
+    if (sortOption === "priceHighLow") return b?.price - a?.price;
+    if (sortOption === "rating") return b?.rating - a?.rating;
+    if (sortOption === "name") return a?.title.localeCompare(b?.title);
     return 0;
   });
 
@@ -259,7 +269,7 @@ const ProductListingPage = ({ subCategory, subCategoryDataa }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isError || !products.length) {
+  if (isError || !products?.length) {
     return (
       <div className="no-data">
         <img src={"NoDataImage"} alt="No Data" />
