@@ -36,7 +36,7 @@ const CartPage = () => {
           const response = await getOneFetchByUrl(
             `${process.env.REACT_APP_API_URL_LOCAL}/product/productDetail?productId=${item?.id}`
           );
-
+          console.log("response", response);
           const { stock } = response?.data[0];
 
           if (stock === 0) {

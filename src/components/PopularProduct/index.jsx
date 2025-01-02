@@ -194,7 +194,7 @@ const PopularProduct = () => {
 
         .product-img {
           height: 100%;
-          object-fit: contain;
+          // object-fit: contain;
           transition: transform 0.3s ease-in-out;
         }
 
