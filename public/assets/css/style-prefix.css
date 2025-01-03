@@ -2912,10 +2912,6 @@ footer {
 
   .product-container .container {
     position: relative;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
     -webkit-box-align: start;
     -webkit-align-items: flex-start;
         -ms-flex-align: start;

@@ -7,10 +7,9 @@ const ProductDetails = ({
   productDetail,
   incrementQuantity,
   decrementQuantity,
+  handleAddToCart,
 }) => {
-  const [mainImage, setMainImage] = useState(
-    productDetail.productimage[0]?.filename || ""
-  );
+  const [mainImage, setMainImage] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showToggle, setShowToggle] = useState(false);
   const descRef = useRef(null);
@@ -41,13 +40,14 @@ const ProductDetails = ({
     >
       <Grid container spacing={2}>
         {/* Product Images Section */}
+        {console.log(productDetail.productimage[0], "==productDetail")}
         <Grid item lg={3.5} sm={5} xs={12}>
           <Box>
             <img
               src={
-                mainImage.startsWith("https")
-                  ? mainImage
-                  : `${process.env.REACT_APP_API_URL_LOCAL}/${mainImage}`
+                productDetail.productimage[0].filename.startsWith("https")
+                  ? productDetail.productimage[0].filename
+                  : `${process.env.REACT_APP_API_URL_LOCAL}/${productDetail.productimage[0].filename}`
               }
               alt="Main Product"
               style={{
@@ -229,6 +229,7 @@ const ProductDetails = ({
                 variant="contained"
                 color="warning"
                 disabled={productDetail.stock === 0 || quantity === 0}
+                onClick={handleAddToCart}
                 startIcon={
                   <img
                     src={AddToCart}

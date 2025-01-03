@@ -2233,7 +2233,6 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
   .product-container .container {
     position: relative;
-    display: flex;
     align-items: flex-start;
     gap: 30px;
     margin-bottom: 30px;

@@ -2,6 +2,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getOneFetchByUrl } from "../../api/Api";
+import Skeleton from "@mui/material/Skeleton";
+import Grid from "@mui/material/Grid";
 
 const RelevantSection = ({ location }) => {
   const loaderRef = useRef(null);
@@ -12,7 +14,6 @@ const RelevantSection = ({ location }) => {
     hasNextPage,
     isFetchingNextPage,
     isError,
-    error,
     isLoading,
   } = useInfiniteQuery({
     queryKey: [
@@ -63,16 +64,21 @@ const RelevantSection = ({ location }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError) {
-    return <p>Error: {"No Data Found"}</p>;
-  }
-
-  const isEmpty = relevantProductsData?.pages?.every(
-    (page) => page.products.length === 0
+  const renderSkeletons = () => (
+    <Grid container spacing={2}>
+      {Array.from({ length: 20 }).map((_, index) => (
+        <Grid item xs={6} sm={4} md={3} key={index}>
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={200}
+            animation="wave"
+          />
+          <Skeleton variant="text" width="60%" animation="wave" />
+          <Skeleton variant="text" width="40%" animation="wave" />
+        </Grid>
+      ))}
+    </Grid>
   );
 
   return (
@@ -83,13 +89,12 @@ const RelevantSection = ({ location }) => {
       }}
     >
       <div className="container">
-        {/* Main Product Section */}
         <div className="product-box">
           <div className="product-main">
-            <h2 className="title">Popular Product</h2>
+            <h2 className="title">Relevant Product</h2>
 
-            {isEmpty ? (
-              <p>No Data Found</p>
+            {isLoading || isError || !relevantProductsData ? (
+              renderSkeletons()
             ) : (
               <div className="product-grid">
                 {relevantProductsData?.pages.map((page) =>
@@ -98,6 +103,7 @@ const RelevantSection = ({ location }) => {
                       key={product.id}
                       className="showcase"
                       onClick={() => handleNavigate(product)}
+                      style={{ cursor: "pointer" }}
                     >
                       <div className="showcase-banner">
                         <div className="image-wrapper">
@@ -145,19 +151,15 @@ const RelevantSection = ({ location }) => {
                 )}
               </div>
             )}
-
-            {isFetchingNextPage && <p>Loading more products...</p>}
           </div>
         </div>
       </div>
 
-      {/* Infinite Scroll Loader */}
       <div
         ref={loaderRef}
         style={{ height: "20px", background: "transparent" }}
       ></div>
 
-      {/* Styling */}
       <style jsx>{`
         .product-grid {
           display: grid;

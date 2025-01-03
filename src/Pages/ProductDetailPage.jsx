@@ -1,32 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import ProductDetails from "../components/ProductDetails";
+import RelevantSection from "../components/RelevantSection";
 import {
   Box,
-  Typography,
   Grid,
-  Button,
-  IconButton,
-  CircularProgress,
+  Typography,
+  Skeleton,
 } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useNavigate, useLocation } from "react-router-dom";
 import { useLocalStorage } from "react-use";
-import RelevantSection from "../components/RelevantSection";
 import { getOneFetchByUrl } from "../api/Api";
-import ProductDetails from "../components/ProductDetails";
-import nodata from "../animation/nodata.gif";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
 const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(0);
   const [cart, setCart] = useLocalStorage("cart", []);
   const location = useLocation();
-  const navigate = useNavigate();
 
   const {
     data: productDetail = {},
@@ -90,53 +79,82 @@ const ProductDetailPage = () => {
 
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
+      <Box sx={{ maxWidth: "1200px", margin: "0 auto", padding: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item lg={3.5} sm={5} xs={12}>
+            <Skeleton
+              variant="rectangular"
+              height={300}
+              sx={{ borderRadius: 2 }}
+            />
+            <Grid container spacing={1} sx={{ marginTop: 1 }}>
+              {[...Array(4)].map((_, index) => (
+                <Grid item key={index}>
+                  <Skeleton variant="rounded" width={50} height={50} />
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+
+          <Grid item lg={8.5} sm={7} xs={12}>
+            <Skeleton variant="text" width="60%" height={30} />
+            <Skeleton
+              variant="text"
+              width="80%"
+              height={40}
+              sx={{ marginTop: 1 }}
+            />
+            <Skeleton
+              variant="text"
+              width="100%"
+              height={20}
+              sx={{ marginTop: 2 }}
+            />
+            <Skeleton variant="text" width="90%" height={20} />
+            <Skeleton variant="text" width="85%" height={20} />
+
+            <Box sx={{ display: "flex", gap: 1, marginTop: 2 }}>
+              <Skeleton variant="rounded" width={60} height={30} />
+              <Skeleton variant="rounded" width={80} height={30} />
+              <Skeleton variant="rounded" width={100} height={30} />
+            </Box>
+
+            <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="text" width={40} height={40} />
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="rounded" width={140} height={40} />
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
     );
   }
 
   if (isError || !productDetail?.id) {
     return (
-      <Box
-        sx={{
-          textAlign: "center",
-          padding: 4,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={{ textAlign: "center", padding: 4 }}>
         <Typography variant="h4" color="text.secondary">
-          <img src={nodata} alt="No Data Found" />
+          No Data Found
         </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <Box sx={{ maxWidth: "1200px", margin: "0 auto", }}>
       <Grid container style={{ padding: 20 }} spacing={2}>
         <Grid item lg={12} sm={12} xs={12}>
           <ProductDetails
             quantity={quantity}
             productDetail={productDetail}
+            handleAddToCart={handleAddToCart}
             decrementQuantity={decrementQuantity}
             incrementQuantity={incrementQuantity}
           />
+          <RelevantSection location={location} />
         </Grid>
       </Grid>
-
-      <Box>
-        <RelevantSection location={location} />
-      </Box>
     </Box>
   );
 };

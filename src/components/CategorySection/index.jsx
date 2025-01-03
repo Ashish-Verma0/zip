@@ -3,12 +3,12 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFetch } from "../../api/Api";
 import { StoreContext } from "../../useContext/Context";
-import Skeleton from "@mui/material/Skeleton"; // Import Skeleton from MUI
+import Skeleton from "@mui/material/Skeleton"; 
 
 const CategorySection = () => {
   const navigate = useNavigate();
 
-  const { setSubCategory, subCategory } = useContext(StoreContext);
+  const { setSubCategory } = useContext(StoreContext);
   const {
     data: categories = [],
     isLoading,
@@ -32,7 +32,7 @@ const CategorySection = () => {
     <div className="category">
       <div className="container">
         <div className="category-item-container has-scrollbar">
-          {isLoading ? (
+          {isLoading || !categories.length ? (
             <>
               {[...Array(4)].map((_, index) => (
                 <div className="category-item" key={index}>

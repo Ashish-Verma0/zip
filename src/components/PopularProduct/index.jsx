@@ -64,7 +64,7 @@ const PopularProduct = () => {
             {/* Show Skeleton Loader or Products */}
             {!hasProducts && !isError && (
               <Grid container spacing={2}>
-                {Array.from({ length: 8 }).map((_, index) => (
+                {Array.from({ length: 20 }).map((_, index) => (
                   <Grid item xs={6} sm={4} md={3} key={index}>
                     <Skeleton
                       variant="rectangular"

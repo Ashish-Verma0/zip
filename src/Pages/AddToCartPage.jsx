@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  IconButton,
-  Typography,
-  Grid,
-  Paper,
-  Box,
-  Card,
-} from "@mui/material";
-import { Delete } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { getOneFetchByUrl } from "../api/Api";
-
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import NoDataAddToCart from "../images/NoDataAddToCart.gif"
+import { Button, Typography, Grid, Paper, Box, Card } from "@mui/material";
 const CartPage = () => {
   const navigate = useNavigate();
 
@@ -248,7 +239,7 @@ const CartPage = () => {
                 gutterBottom
                 style={{ margin: "0 0 0 65px" }}
               >
-                No Products
+                <img src={NoDataAddToCart} alt="" />
               </Typography>
             )}
           </Grid>
