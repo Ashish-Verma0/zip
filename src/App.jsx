@@ -52,18 +52,21 @@ function App() {
           <FooterSection />
         </>
       ) : (
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route exact path="*" element={<LoginPage />} />
-          <Route exact path="/login" element={<LoginPage />} />
-          <Route exact path="/signup" element={<SignUpPage />} />
-          <Route
-            exact
-            path="/forgot-password/:token"
-            element={<ForgetPassword />}
-          />
-          <Route exact path="/email-verify" element={<EmailVerifyPage />} />
-        </Routes>
+        <>
+          <NavBar />
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="*" element={<LoginPage />} />
+            <Route exact path="/login" element={<LoginPage />} />
+            <Route exact path="/signup" element={<SignUpPage />} />
+            <Route
+              exact
+              path="/forgot-password/:token"
+              element={<ForgetPassword />}
+            />
+            <Route exact path="/email-verify" element={<EmailVerifyPage />} />
+          </Routes>
+        </>
       )}
     </>
   );

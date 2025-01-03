@@ -221,7 +221,7 @@ const BillingModal = ({ modalOpen, handleModalClose }) => {
           variant="contained"
           color="primary"
           fullWidth
-          sx={{ mt: 3 }}
+          sx={{ mt: 3, backgroundColor: "#13a0a8" }}
           onClick={handleSaveAddress}
           disabled={hide ? true : false}
         >

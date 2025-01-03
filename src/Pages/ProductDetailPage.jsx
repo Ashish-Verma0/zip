@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductDetails from "../components/ProductDetails";
 import RelevantSection from "../components/RelevantSection";
-import {
-  Box,
-  Grid,
-  Typography,
-  Skeleton,
-} from "@mui/material";
+import { Box, Grid, Typography, Skeleton } from "@mui/material";
 import { useLocalStorage } from "react-use";
 import { getOneFetchByUrl } from "../api/Api";
 import { useLocation } from "react-router-dom";
@@ -54,6 +49,7 @@ const ProductDetailPage = () => {
   };
 
   const handleAddToCart = () => {
+    console.log("sdfsdfsdf");
     if (quantity > 0 && quantity <= productDetail.stock) {
       const updatedCart = cart.map((item) =>
         item.id === productDetail.id ? { ...item, quantity } : item
@@ -142,7 +138,7 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: "1200px", margin: "0 auto", }}>
+    <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
       <Grid container style={{ padding: 20 }} spacing={2}>
         <Grid item lg={12} sm={12} xs={12}>
           <ProductDetails

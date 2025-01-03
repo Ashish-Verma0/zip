@@ -1,10 +1,6 @@
 // FooterSection.js
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 const FooterSection = () => {
   return (
@@ -20,7 +16,7 @@ const FooterSection = () => {
       }}
     >
       <Container>
-        <Box sx={{ padding: "10px 0" }}>
+        <Box>
           <Typography variant="body2">
             Copyright &copy; {new Date().getFullYear()} Globel Info Tech All
             rights reserved.

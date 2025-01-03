@@ -28,7 +28,7 @@ const ProductDetails = ({
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
-
+  console.log(productDetail, "==productDetail");
   return (
     <Box
       sx={{
@@ -200,7 +200,6 @@ const ProductDetails = ({
               }}
             >
               <IconButton
-                disabled={quantity === 0 || productDetail.stock === 0}
                 onClick={decrementQuantity}
                 sx={{
                   backgroundColor: "#f0f0f0",
@@ -214,7 +213,6 @@ const ProductDetails = ({
                 {productDetail.stock === 0 ? "Out of Stock" : quantity}
               </Typography>
               <IconButton
-                disabled={productDetail.stock === 0 || quantity === 0}
                 onClick={incrementQuantity}
                 sx={{
                   backgroundColor: "#f0f0f0",
@@ -228,7 +226,6 @@ const ProductDetails = ({
               <Button
                 variant="contained"
                 color="warning"
-                disabled={productDetail.stock === 0 || quantity === 0}
                 onClick={handleAddToCart}
                 startIcon={
                   <img

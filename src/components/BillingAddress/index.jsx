@@ -126,17 +126,17 @@ const BillingAddAddress = ({
             alignItems: "center",
             p: 1.5,
             cursor: "pointer",
-            border: "1px dashed #1976d2",
+            border: "1px dashed #13a0a8",
             borderRadius: "8px",
             "&:hover": { backgroundColor: "#f0f0f0" },
           }}
           onClick={handleModalOpen}
         >
-          <AddLocationIcon sx={{ color: "#1976d2", mr: 2 }} />
+          <AddLocationIcon sx={{ color: "#13a0a8", mr: 2 }} />
           <Typography
             sx={{
               textTransform: "none",
-              color: "#1976d2",
+              color: "#13a0a8",
               fontWeight: "bold",
             }}
           >
