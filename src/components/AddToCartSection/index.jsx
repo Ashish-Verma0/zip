@@ -1,6 +1,7 @@
 import React from "react";
 import "./addToCart.css";
-import nodata from "../../animation/nodata.gif";
+import emptycart2 from "../../images/emptycart2.png";
+import { useNavigate } from "react-router-dom";
 
 const AddToCartSection = ({
   total,
@@ -9,30 +10,48 @@ const AddToCartSection = ({
   updateQuantity,
   handleClickToBilling,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <section className="cart-container gradient-custom">
       <div className="container py-2">
         <div className="row d-flex justify-content-center my-4">
           {cartItems.length === 0 ? (
-            <div
-              className="text-center"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src={nodata}
-                alt="No items in cart"
-                style={{
-                  width: "600px",
-                  height: "600px",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                  borderRadius: "8px",
-                }}
-              />
+            <div className="container-noData">
+              <div className="content-wrapper">
+                <img
+                  src={emptycart2}
+                  alt="Empty Menu"
+                  className="menu-image-noData"
+                />
+                <h5>
+                  <strong>Empty Menu</strong>
+                </h5>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    width: "250px",
+                    color: "#a7a7a7",
+                  }}
+                >
+                  Looks like you haven’t made your choice yet...
+                </p>
+                <button className="noDataBtn" onClick={() => navigate("/")}>
+                  Back to Menu
+                </button>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    width: "250px",
+                  }}
+                >
+                  <span style={{ color: "#ed7c6b", marginTop: "5px" }}>
+                    Check what we've got for you
+                  </span>
+                  <br />
+                  <span style={{ color: "#c5c5c5" }}>and get it swished!</span>
+                </p>
+              </div>
             </div>
           ) : (
             <>
