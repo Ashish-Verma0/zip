@@ -49,7 +49,6 @@ function App() {
             <Route exact path="/billing" element={<BillingPage />} />
             <Route exact path="/search" element={<SearchResults />} />
           </Routes>
-          <FooterSection />
         </>
       ) : (
         <>

@@ -30,7 +30,7 @@ const AddToCartSection = ({
                 <p
                   style={{
                     fontSize: "15px",
-                    width: "250px",
+                    width: "280px",
                     color: "#a7a7a7",
                   }}
                 >
@@ -42,7 +42,7 @@ const AddToCartSection = ({
                 <p
                   style={{
                     fontSize: "12px",
-                    width: "250px",
+                    width: "280px",
                   }}
                 >
                   <span style={{ color: "#ed7c6b", marginTop: "5px" }}>
@@ -55,7 +55,7 @@ const AddToCartSection = ({
             </div>
           ) : (
             <>
-              <div className="col-md-8">
+              <div className="col-md-8 col-12">
                 <div className="scrollable-div">
                   {cartItems.map((item) => (
                     <div
@@ -115,7 +115,7 @@ const AddToCartSection = ({
                             </p>
                             <button
                               type="button"
-                              className="btn  btn-sm me-1"
+                              className="btn btn-sm me-1"
                               style={{
                                 backgroundColor: "#f46677",
                                 borderColor: "#f46677",
@@ -133,7 +133,7 @@ const AddToCartSection = ({
                               style={{ maxWidth: "200px" }}
                             >
                               <button
-                                className="btn  px-3 me-2"
+                                className="btn px-3 me-2"
                                 style={{
                                   backgroundColor: "#13a0a8",
                                   borderColor: "#13a0a8",
@@ -152,7 +152,7 @@ const AddToCartSection = ({
                               />
 
                               <button
-                                className="btn  px-3 ms-2"
+                                className="btn px-3 ms-2"
                                 style={{
                                   backgroundColor: "#13a0a8",
                                   borderColor: "#13a0a8",
@@ -171,7 +171,7 @@ const AddToCartSection = ({
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-4 col-12">
                 <div className="card mb-4">
                   <div className="card-header py-3">
                     <h5 className="mb-0">
@@ -233,7 +233,7 @@ const AddToCartSection = ({
 
                     <button
                       type="button"
-                      className="btn  btn-lg btn-block"
+                      className="btn btn-lg btn-block"
                       onClick={handleClickToBilling}
                       style={{
                         backgroundColor: "#13a0a8",

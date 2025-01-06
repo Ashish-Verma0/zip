@@ -93,18 +93,15 @@ const ProductDetailPage = () => {
           </Grid>
 
           <Grid item lg={8.5} sm={7} xs={12}>
-            <Skeleton variant="text" width="60%" height={30} />
             <Skeleton
               variant="text"
               width="80%"
               height={40}
-              sx={{ marginTop: 1 }}
             />
             <Skeleton
               variant="text"
               width="100%"
               height={20}
-              sx={{ marginTop: 2 }}
             />
             <Skeleton variant="text" width="90%" height={20} />
             <Skeleton variant="text" width="85%" height={20} />

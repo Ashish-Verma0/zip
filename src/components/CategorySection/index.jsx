@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFetch } from "../../api/Api";
 import { StoreContext } from "../../useContext/Context";
-import Skeleton from "@mui/material/Skeleton"; 
+import Skeleton from "@mui/material/Skeleton";
 
 const CategorySection = () => {
   const navigate = useNavigate();
@@ -58,14 +58,18 @@ const CategorySection = () => {
                   <img
                     src={`${process.env.REACT_APP_API_URL_LOCAL}/${category.categoryLogo.filename}`}
                     alt={category.categoryName}
-                    width="30"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      objectFit: "cover",
+                    }}
                   />
                 </div>
 
                 <div className="category-content-box">
                   <div className="category-content-flex">
                     <h3 className="category-item-title">{category.categoryName}</h3>
-                    <p className="category-item-amount">({category.amount})</p>
+                    <p className="category-item-amount">(2)</p>
                   </div>
 
                   <div

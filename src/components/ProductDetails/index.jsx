@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import AddToCart from "../../images/AddToCart.png";
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 
 const ProductDetails = ({
   quantity,
@@ -28,7 +30,7 @@ const ProductDetails = ({
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
-  console.log(productDetail, "==productDetail");
+
   return (
     <Box
       sx={{
@@ -36,11 +38,11 @@ const ProductDetails = ({
         borderRadius: 2,
         maxWidth: "100%",
         margin: "0 auto",
+        padding: 2.5,
       }}
     >
       <Grid container spacing={2}>
         {/* Product Images Section */}
-        {console.log(productDetail.productimage[0], "==productDetail")}
         <Grid item lg={3.5} sm={5} xs={12}>
           <Box>
             <img
@@ -54,9 +56,18 @@ const ProductDetails = ({
                 width: "100%",
                 maxWidth: "300px",
                 borderRadius: "8px",
+                display: "block",
+                margin: "0 auto",
               }}
             />
-            <Grid container spacing={1} sx={{ marginTop: 1 }}>
+            <Grid
+              container
+              spacing={1}
+              sx={{
+                marginTop: 1,
+                justifyContent: { xs: "center", sm: "flex-start" },
+              }}
+            >
               {productDetail.productimage?.map((image, index) => (
                 <Grid item key={index}>
                   <img
@@ -95,7 +106,12 @@ const ProductDetails = ({
 
         {/* Product Info Section */}
         <Grid item lg={8.5} sm={7} xs={12}>
-          <Box sx={{ textAlign: "left" }}>
+          <Box
+            sx={{
+              textAlign: "left",
+              marginLeft: { xs: 0, sm: 2 },
+            }}
+          >
             <Typography
               variant="subtitle2"
               sx={{
@@ -205,9 +221,10 @@ const ProductDetails = ({
                   backgroundColor: "#f0f0f0",
                   borderRadius: 1,
                   fontSize: 18,
+                  width: "40px",
                 }}
               >
-                -
+                <RemoveIcon />
               </IconButton>
               <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                 {productDetail.stock === 0 ? "Out of Stock" : quantity}
@@ -220,7 +237,7 @@ const ProductDetails = ({
                   fontSize: 18,
                 }}
               >
-                +
+                <AddIcon />
               </IconButton>
 
               <Button

@@ -54,7 +54,7 @@ const PopularProduct = () => {
     data?.pages?.some((page) => page.products.length > 0) ?? false;
 
   return (
-    <div className="product-container">
+    <div className="product-container" style={{marginBottom:"80px"}}>
       <div className="overlay" data-overlay></div>
       <div className="container">
         <div className="product-box">

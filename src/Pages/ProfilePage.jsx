@@ -6,7 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOneFetchByUrl, putFetchData } from "../api/Api";
-
+import searchLoader2 from "../animation/searchLoader2.gif";
 const ProfilePage = () => {
   const {
     data: userProfile = null,
@@ -106,151 +106,162 @@ const ProfilePage = () => {
     profileUpdate.mutate(editedUser);
   };
 
-  if (isLoading) return <Typography>Loading...</Typography>;
+  if (isLoading)
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        mt={4}
+        height="75.9vh"
+      >
+        <img
+          src={searchLoader2}
+          alt="Loading..."
+          style={{ maxWidth: "200px" }}
+        />
+        <Typography variant="body2" color="textSecondary">
+          Loading your profile...
+        </Typography>
+      </Box>
+    );
   if (isError) return <Typography>Error: {error.message}</Typography>;
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ minHeight: "50vh", backgroundColor: "#f5f5f5", padding: "20px" }}
-    >
-      <Grid item xs={12} sm={8} md={6} lg={4}>
-        <Paper
-          elevation={4}
-          sx={{
-            padding: "30px",
-            borderRadius: "15px",
-            backgroundColor: "#ffffff",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          {/* <Box textAlign="center">
-            <img
-              src={user.avatar}
-              alt="avatar"
-              style={{
-                width: "35%",
-                borderRadius: "50%",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            />
-          </Box> */}
-          <Box mb={4} sx={{ marginTop: "20px" }}>
-            <Typography
-              variant="h5"
-              align="center"
-              sx={{ fontWeight: "bold", color: "#333" }}
-            >
-              Profile Details
-            </Typography>
-
-            <TextField
-              fullWidth
-              name="firstName"
-              value={isEditing ? editedUser.firstName : user.firstName}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              id="firstName"
-              sx={{
-                marginBottom: "25px",
-                marginTop: "20px",
-                borderBottom: "2px solid #ddd",
-              }}
-              placeholder="First Name"
-            />
-
-            <TextField
-              fullWidth
-              name="lastName"
-              value={isEditing ? editedUser.lastName : user.lastName}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              id="lastName"
-              sx={{
-                marginBottom: "25px",
-                borderBottom: "2px solid #ddd",
-              }}
-              placeholder="Last Name"
-            />
-
-            <TextField
-              fullWidth
-              name="email"
-              value={isEditing ? editedUser.email : user.email}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              id="email"
-              placeholder="Email"
-              sx={{
-                borderBottom: "2px solid #ddd",
-              }}
-            />
-          </Box>
-
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            flexDirection="column"
-            gap={2}
-            alignItems="center"
-          >
-            {!isEditing ? (
-              <Button
-                variant="contained"
-                startIcon={<EditIcon />}
-                onClick={handleEdit}
-                sx={{
-                  marginBottom: "10px",
-                  backgroundImage:
-                    "linear-gradient(to right, #ff7e5f, #feb47b)",
-                  color: "#ffffff",
-                  fontWeight: "bold",
-                  boxShadow: "0 3px 8px rgba(255, 126, 95, 0.4)",
-                  width: "100%",
-                }}
-              >
-                Edit Profile
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                startIcon={<SaveIcon />}
-                onClick={handleSave}
-                sx={{
-                  marginBottom: "10px",
-                  backgroundImage:
-                    "linear-gradient(to right, #11998e, #38ef7d)",
-                  color: "#ffffff",
-                  fontWeight: "bold",
-                  boxShadow: "0 3px 8px rgba(56, 239, 125, 0.4)",
-                  width: "100%",
-                }}
-              >
-                Save Changes
-              </Button>
-            )}
-
-            <Button
-              variant="contained"
-              startIcon={<LogoutIcon />}
-              onClick={handleLogout}
-              sx={{
-                backgroundImage: "linear-gradient(to right, #e52d27, #b31217)",
-                color: "#ffffff",
-                fontWeight: "bold",
-                boxShadow: "0 3px 8px rgba(179, 18, 23, 0.4)",
-                width: "100%",
-              }}
-            >
-              Logout
-            </Button>
-          </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+    <div className="container-xl px-4 mt-4">
+      <hr className="mt-0 mb-4" />
+      <div className="row">
+        <div className="col-xl-4">
+          <div className="card mb-4 mb-xl-0">
+            <div className="card-header">Profile Picture</div>
+            <div className="card-body d-flex flex-column align-items-center justify-content-center text-center">
+              <img
+                className="img-account-profile rounded-circle mb-2"
+                src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                alt=""
+                style={{ width: "150px", height: "150px", objectFit: "cover" }}
+              />
+              <div className="small font-italic text-muted mb-4">
+                JPG or PNG no larger than 5 MB
+              </div>
+              <button className="btn btn-primary" style={{background:"#13a0a8"}} type="button">
+                Upload new image
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-8">
+          <div className="card mb-4">
+            <div className="card-header">Account Details</div>
+            <div className="card-body">
+              <form>
+                <div className="row gx-3 mb-3">
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputFirstName">
+                      First name
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputFirstName"
+                      type="text"
+                      placeholder="Enter your first name"
+                      defaultValue="Valerie"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputLastName">
+                      Last name
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputLastName"
+                      type="text"
+                      placeholder="Enter your last name"
+                      defaultValue="Luna"
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label className="small mb-1" htmlFor="inputEmailAddress">
+                    Email address
+                  </label>
+                  <input
+                    className="form-control"
+                    id="inputEmailAddress"
+                    type="email"
+                    placeholder="Enter your email address"
+                    defaultValue="name@example.com"
+                  />
+                </div>
+                {/* Form Row*/}
+                <div className="row gx-3 mb-3">
+                {/* Form Group (organization name)*/}
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="inputOrgName">
+                    Organization name
+                  </label>
+                  <input
+                    className="form-control"
+                    id="inputOrgName"
+                    type="text"
+                    placeholder="Enter your organization name"
+                    defaultValue="Start Bootstrap"
+                  />
+                </div>
+                {/* Form Group (location)*/}
+                <div className="col-md-6">
+                  <label className="small mb-1" htmlFor="inputLocation">
+                    Location
+                  </label>
+                  <input
+                    className="form-control"
+                    id="inputLocation"
+                    type="text"
+                    placeholder="Enter your location"
+                    defaultValue="San Francisco, CA"
+                  />
+                </div>
+              </div>
+                <div className="row gx-3 mb-3">
+                  {/* Form Group (phone number)*/}
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputPhone">
+                      Phone number
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputPhone"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      defaultValue="555-123-4567"
+                    />
+                  </div>
+                  {/* Form Group (birthday)*/}
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputBirthday">
+                      Birthday
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputBirthday"
+                      type="text"
+                      name="birthday"
+                      placeholder="Enter your birthday"
+                      defaultValue="06/10/1988"
+                    />
+                  </div>
+                </div>
+                {/* Save changes button*/}
+                <button className="btn btn-primary" style={{background:"#13a0a8"}} type="button">
+                  Save changes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
