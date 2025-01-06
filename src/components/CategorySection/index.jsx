@@ -68,7 +68,9 @@ const CategorySection = () => {
 
                 <div className="category-content-box">
                   <div className="category-content-flex">
-                    <h3 className="category-item-title">{category.categoryName}</h3>
+                    <h3 className="category-item-title">
+                      {category.categoryName}
+                    </h3>
                     <p className="category-item-amount">(2)</p>
                   </div>
 

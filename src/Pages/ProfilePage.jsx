@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, TextField, Button, Grid, Paper } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOneFetchByUrl, putFetchData } from "../api/Api";
 import searchLoader2 from "../animation/searchLoader2.gif";
+
 const ProfilePage = () => {
   const {
     data: userProfile = null,
@@ -24,8 +25,10 @@ const ProfilePage = () => {
     staleTime: 35 * 60 * 1000,
   });
 
-  const generateImageUrl = (index) =>
-    `https://picsum.photos/100/100?random=${index + 1}`;
+  const generateImageUrl = () => {
+    const randomIndex = Math.floor(Math.random() * 7) + 1;
+    return `http://bootdey.com/img/Content/avatar/avatar${randomIndex}.png`;
+  };
 
   const [user, setUser] = useState({
     firstName: "",
@@ -37,7 +40,8 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
 
-  // Update `user` state when `userProfile` changes
+  const [avatarFile, setAvatarFile] = useState(null); // Track the avatar file
+
   useEffect(() => {
     if (userProfile) {
       setUser({
@@ -69,7 +73,8 @@ const ProfilePage = () => {
     navigate("/login");
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.preventDefault(); // Prevent page refresh
     setIsEditing(true);
   };
 
@@ -77,7 +82,6 @@ const ProfilePage = () => {
 
   const profileUpdate = useMutation({
     mutationFn: async (formData) => {
-      console.log("formData", formData);
       const res = await putFetchData(
         `${process.env.REACT_APP_API_URL_LOCAL}/user/update-user`,
         formData
@@ -87,7 +91,6 @@ const ProfilePage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["userProfile"]);
       alert("Profile Updated successfully");
-
       setIsEditing(false);
     },
     onError: (error) => {
@@ -96,14 +99,33 @@ const ProfilePage = () => {
     },
   });
 
-  const handleSave = () => {
+  const handleSave = (e) => {
+    e.preventDefault(); // Prevent form from refreshing
     setUser(editedUser);
 
     const formData = new FormData();
     formData.append("firstName", editedUser.firstName);
     formData.append("lastName", editedUser.lastName);
     formData.append("email", editedUser.email);
-    profileUpdate.mutate(editedUser);
+
+    // Append the avatar file only if it's selected
+    if (avatarFile) {
+      formData.append("avatar", avatarFile);
+    }
+
+    profileUpdate.mutate(formData);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const maxSize = 5 * 1024 * 1024; // 5MB max size
+      if (file.size > maxSize) {
+        alert("File size should not exceed 5 MB");
+        return;
+      }
+      setAvatarFile(file); // Store the file when selected
+    }
   };
 
   if (isLoading)
@@ -138,16 +160,189 @@ const ProfilePage = () => {
             <div className="card-body d-flex flex-column align-items-center justify-content-center text-center">
               <img
                 className="img-account-profile rounded-circle mb-2"
-                src="http://bootdey.com/img/Content/avatar/avatar1.png"
-                alt=""
+                src={user.avatar}
+                alt="Profile"
                 style={{ width: "150px", height: "150px", objectFit: "cover" }}
               />
               <div className="small font-italic text-muted mb-4">
                 JPG or PNG no larger than 5 MB
               </div>
-              <button className="btn btn-primary" style={{background:"#13a0a8"}} type="button">
-                Upload new image
-              </button>
+              <div
+                classname="avatar-options"
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 5,
+                }}
+              >
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                    alt="Avatar 1"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div classname="avatar-option profile-dummy-img">
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar2.png"
+                    alt="Avatar 2"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar3.png"
+                    alt="Avatar 3"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar4.png"
+                    alt="Avatar 4"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar5.png"
+                    alt="Avatar 5"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar6.png"
+                    alt="Avatar 6"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar7.png"
+                    alt="Avatar 7"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+                <div
+                  classname="avatar-option profile-dummy-img"
+                  style={{
+                    width: "23%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="http://bootdey.com/img/Content/avatar/avatar8.png"
+                    alt="Avatar 8"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {isEditing && (
+                <label
+                  className="btn btn-primary"
+                  style={{ background: "#13a0a8", cursor: "pointer" }}
+                >
+                  Upload new image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                  />
+                </label>
+              )}
             </div>
           </div>
         </div>
@@ -163,10 +358,16 @@ const ProfilePage = () => {
                     </label>
                     <input
                       className="form-control"
-                      id="inputFirstName"
+                      id="firstName"
+                      name="firstName"
                       type="text"
                       placeholder="Enter your first name"
-                      defaultValue="Valerie"
+                      value={isEditing ? editedUser.firstName : user.firstName}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      style={{
+                        backgroundColor: "white",
+                      }}
                     />
                   </div>
                   <div className="col-md-6">
@@ -175,10 +376,16 @@ const ProfilePage = () => {
                     </label>
                     <input
                       className="form-control"
-                      id="inputLastName"
+                      id="lastName"
+                      name="lastName"
                       type="text"
                       placeholder="Enter your last name"
-                      defaultValue="Luna"
+                      value={isEditing ? editedUser.lastName : user.lastName}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      style={{
+                        backgroundColor: "white",
+                      }}
                     />
                   </div>
                 </div>
@@ -188,41 +395,46 @@ const ProfilePage = () => {
                   </label>
                   <input
                     className="form-control"
-                    id="inputEmailAddress"
+                    id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter your email address"
-                    defaultValue="name@example.com"
+                    value={isEditing ? editedUser.email : user.email}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    style={{
+                      backgroundColor: "white",
+                    }}
                   />
                 </div>
-                {/* Form Row*/}
                 <div className="row gx-3 mb-3">
-                {/* Form Group (organization name)*/}
-                <div className="col-md-6">
-                  <label className="small mb-1" htmlFor="inputOrgName">
-                    Organization name
-                  </label>
-                  <input
-                    className="form-control"
-                    id="inputOrgName"
-                    type="text"
-                    placeholder="Enter your organization name"
-                    defaultValue="Start Bootstrap"
-                  />
+                  {/* Form Group (organization name)*/}
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputOrgName">
+                      Organization name
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputOrgName"
+                      type="text"
+                      placeholder="Enter your organization name"
+                      defaultValue="Start Bootstrap"
+                    />
+                  </div>
+                  {/* Form Group (location)*/}
+                  <div className="col-md-6">
+                    <label className="small mb-1" htmlFor="inputLocation">
+                      Location
+                    </label>
+                    <input
+                      className="form-control"
+                      id="inputLocation"
+                      type="text"
+                      placeholder="Enter your location"
+                      defaultValue="San Francisco, CA"
+                    />
+                  </div>
                 </div>
-                {/* Form Group (location)*/}
-                <div className="col-md-6">
-                  <label className="small mb-1" htmlFor="inputLocation">
-                    Location
-                  </label>
-                  <input
-                    className="form-control"
-                    id="inputLocation"
-                    type="text"
-                    placeholder="Enter your location"
-                    defaultValue="San Francisco, CA"
-                  />
-                </div>
-              </div>
                 <div className="row gx-3 mb-3">
                   {/* Form Group (phone number)*/}
                   <div className="col-md-6">
@@ -252,9 +464,30 @@ const ProfilePage = () => {
                     />
                   </div>
                 </div>
-                {/* Save changes button*/}
-                <button className="btn btn-primary" style={{background:"#13a0a8"}} type="button">
-                  Save changes
+                {!isEditing ? (
+                  <button
+                    className="btn btn-primary"
+                    style={{ background: "#13a0a8" }}
+                    onClick={handleEdit}
+                  >
+                    Edit Profile
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    style={{ background: "#13a0a8" }}
+                    type="button"
+                    onClick={handleSave}
+                  >
+                    Save changes
+                  </button>
+                )}
+                <button
+                  className="btn btn-primary"
+                  style={{ marginLeft: "10px", background: "#ff6f61" }}
+                  onClick={handleLogout}
+                >
+                  Logout
                 </button>
               </form>
             </div>

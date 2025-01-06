@@ -54,7 +54,7 @@ const ProductDetails = ({
               alt="Main Product"
               style={{
                 width: "100%",
-                maxWidth: "300px",
+                maxWidth: "250px",
                 borderRadius: "8px",
                 display: "block",
                 margin: "0 auto",

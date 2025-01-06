@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import "../src/css/style.css";
@@ -26,7 +27,7 @@ function App() {
   return (
     <>
       {token?.length > 5 ? (
-        <>
+        <React.Fragment>
           <NavBar />
           <Routes>
             <Route exact path="*" element={<HomePage />} />
@@ -49,9 +50,10 @@ function App() {
             <Route exact path="/billing" element={<BillingPage />} />
             <Route exact path="/search" element={<SearchResults />} />
           </Routes>
-        </>
+          <FooterSection />
+        </React.Fragment>
       ) : (
-        <>
+        <React.Fragment>
           <NavBar />
           <Routes>
             <Route exact path="/" element={<HomePage />} />
@@ -65,7 +67,8 @@ function App() {
             />
             <Route exact path="/email-verify" element={<EmailVerifyPage />} />
           </Routes>
-        </>
+          <FooterSection />
+        </React.Fragment>
       )}
     </>
   );

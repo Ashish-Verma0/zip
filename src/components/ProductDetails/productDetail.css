@@ -5,7 +5,6 @@
 
 .productDetail-container {
   display: flex;
-  flex-wrap: wrap;
   gap: 2rem;
   max-width: 1200px;
   padding: 2rem;
@@ -16,7 +15,6 @@
 .product-images {
   flex: 1;
   text-align: center;
-
 }
 
 #main-image {
@@ -30,7 +28,6 @@
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
-
 }
 
 .thumbnail {
@@ -137,7 +134,7 @@
   .product-container {
     flex-direction: row;
     padding: 1rem;
-    gap: 1.5rem; 
+    gap: 1.5rem;
   }
 
   #main-image {

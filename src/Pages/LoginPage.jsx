@@ -1,18 +1,16 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { postFetchData } from "../api/Api";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import loginAnimation from "../animation/loginAnimation.gif";
 import {
-  TextField,
-  Button,
   Typography,
-  Grid,
-  Container,
-  Box,
   Checkbox,
   FormControlLabel,
+  Box,
+  Skeleton,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { postFetchData } from "../api/Api";
 import "./style.css";
 
 const LoginPage = () => {
@@ -89,15 +87,25 @@ const LoginPage = () => {
 
     mutation.mutate(data);
   };
+  const [loading, setLoading] = useState(true);
 
   return (
     <div className="main-loginContainer">
       <div className="login-container">
         <div className="login-card">
-          <h1>Welcome</h1>
-          <div className="logo">
-            <span>A</span>
-          </div>
+          <h1 className="d-flex justify-content-center align-items-center">
+            Welcome Back
+          </h1>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            {loading && (
+              <Skeleton variant="circular" width={120} height={120} />
+            )}
+            <img
+              src={loginAnimation}
+              alt="Sign Up"
+              onLoad={() => setLoading(false)}
+            />
+          </Box>
           <form onSubmit={handleLogin}>
             <div className="input-group">
               <input
@@ -124,7 +132,9 @@ const LoginPage = () => {
                 {passwordType === "password" ? "🙈" : "👁️"}
               </span>
             </div>
-            {error && <Typography className="error-message">{error}</Typography>}
+            {error && (
+              <Typography className="error-message">{error}</Typography>
+            )}
             <FormControlLabel
               control={
                 <Checkbox
@@ -140,8 +150,29 @@ const LoginPage = () => {
             </button>
           </form>
           <p className="signup-text">
-            Don't have an account? <a href="/signup">Sign Up</a>
-            <a href="/forgot-password">Forgot Password?</a>
+            <spam className="d-flex justify-content-center align-items-center">
+              Don't have an account?&nbsp;
+              <Link
+                to="/signup"
+                style={{
+                  textDecoration: "none",
+                  color: "#4facfe",
+                  fontWeight: "600",
+                }}
+              >
+                Sign Up
+              </Link>
+            </spam>
+            <Link
+              to="/email-verify"
+              style={{
+                textDecoration: "none",
+                color: "#4facfe",
+                fontWeight: "600",
+              }}
+            >
+              Forgot Password
+            </Link>
           </p>
         </div>
       </div>

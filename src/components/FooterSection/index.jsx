@@ -1,21 +1,18 @@
 // FooterSection.js
 import React from "react";
 import { Box, Container, Typography } from "@mui/material";
-
 const FooterSection = () => {
   return (
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#282c34",
+        background:
+          "linear-gradient(to right,rgb(8, 89, 95),rgb(95, 173, 173))", // Blue gradient
         color: "#fff",
         textAlign: "center",
         padding: "20px 0",
         mt: "auto",
         width: "100%",
-        bottom:0,
-        left:0,
-        right:0,
       }}
     >
       <Container>
