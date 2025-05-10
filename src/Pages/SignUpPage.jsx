@@ -8,18 +8,26 @@ import {
   Paper,
   useMediaQuery,
   useTheme,
+  FormControlLabel,
+  Checkbox,
+  Skeleton,
 } from "@mui/material";
 
 import { toast } from "react-toastify";
+import signUpAnimation from "../animation/signUpAnimation.gif";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { postFetchData } from "../api/Api";
+import "./style.css";
 
 const SignUpPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const notify = (data) => toast(data);
   const navigate = useNavigate();
+  const [passwordType, setPasswordType] = useState("password");
+  const [error, setError] = useState("");
+
   const [hide, setHide] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,15 +45,6 @@ const SignUpPage = () => {
     try {
       setHide(true);
       e.preventDefault();
-      // const formdataa = new FormData();
-      // formdataa.append("firstName", formData.firstName);
-      // formdataa.append("lastName", formData.lastName);
-      // formdataa.append("email", formData.email);
-      // formdataa.append("password", formData.password);
-      // const res = await postFetch(
-      //   `${process.env.REACT_APP_API_URL_LOCAL}/user/create`,
-      //   formdataa
-      // );
       const res = await postFetchData(
         `${process.env.REACT_APP_API_URL_LOCAL}/user/create`,
         formData
@@ -67,131 +66,89 @@ const SignUpPage = () => {
       console.log(error);
     }
   };
-
+  const togglePassword = () => {
+    setPasswordType(passwordType === "password" ? "text" : "password");
+  };
+  const [loading, setLoading] = useState(true);
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{ minHeight: "100vh", padding: isMobile ? "15px" : "30px" }}
-    >
-      <Grid item xs={12} sm={8} md={6} lg={4}>
-        <Paper
-          elevation={3}
-          style={{
-            padding: isMobile ? "15px" : "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <Box textAlign="center" mb={2}>
-            <Typography
-              variant={isMobile ? "h5" : "h4"}
-              style={{ marginBottom: "20px", fontWeight: "bold" }}
-            >
-              Sign Up
-            </Typography>
-
-            {/* <Box position="relative" display="inline-block">
-              <Avatar
-                src={
-                  formData.avatar
-                    ? URL.createObjectURL(formData.avatar)
-                    : "https://via.placeholder.com/150"
-                }
-                alt="Avatar Preview"
-                style={{
-                  width: isMobile ? 100 : 120,
-                  height: isMobile ? 100 : 120,
-                  margin: "auto",
-                  border: "2px solid #ccc",
-                }}
-              />
+    <div className="main-loginContainer">
+      <div className="login-container">
+        <div className="login-card">
+          <h1 className="d-flex justify-content-center align-items-center">
+            Welcome
+          </h1>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            {loading && (
+              <Skeleton variant="circular" width={120} height={120} />
+            )}
+            <img
+              src={signUpAnimation}
+              alt="Sign Up"
+              onLoad={() => setLoading(false)}
+            />
+          </Box>
+          <form onSubmit={handleSignup}>
+            <div className="input-group">
               <input
-                type="file"
-                onChange={"handleFileChange"}
-                accept="image/*"
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  width: "100%",
-                  height: "100%",
-                  opacity: 0,
-                  cursor: "pointer",
-                }}
+                type="text"
+                id="name"
+                name="firstName"
+                placeholder="Name"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
               />
-            </Box>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              style={{ marginTop: "10px" }}
-            >
-              Upload Profile
-            </Typography> */}
-          </Box>
-
-          <Box mb={3}>
-            <TextField
-              label="First Name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <TextField
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-            <TextField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              type="email"
-              required
-            />
-            <TextField
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              type="password"
-              required
-            />
-          </Box>
-
-          <Box mb={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSignup}
-              style={{ width: "100%", padding: "12px 0" }}
-              disabled={hide ? true : false}
-            >
-              Sign Up
-            </Button>
-          </Box>
-
-          <Box textAlign="center">
-            <Typography variant="body2">
-              Already have an account?{" "}
-              <NavLink to="/login">Back to Login</NavLink>
-            </Typography>
-          </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+            </div>
+            <div className="input-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email"
+                required
+              />
+            </div>
+            <div className="input-group password-group">
+              <input
+                type={passwordType}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Password"
+                required
+              />
+              <span className="eye-icon" onClick={togglePassword}>
+                {passwordType === "password" ? "🙈" : "👁️"}
+              </span>
+            </div>
+            {error && (
+              <Typography className="error-message">{error}</Typography>
+            )}
+            <button type="submit" className="login-button" disabled={hide}>
+              {hide ? "Sign Up..." : "Sign Up"}
+            </button>
+          </form>
+          <p className="signup-text">
+            <spam className="d-flex justify-content-center align-items-center">
+              Already have an account?&nbsp;
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                  color: "#4facfe",
+                  fontWeight: "600",
+                }}
+              >
+                Login
+              </Link>
+            </spam>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 

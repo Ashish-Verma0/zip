@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import "../src/css/style.css";
@@ -26,7 +27,7 @@ function App() {
   return (
     <>
       {token?.length > 5 ? (
-        <>
+        <React.Fragment>
           <NavBar />
           <Routes>
             <Route exact path="*" element={<HomePage />} />
@@ -50,20 +51,24 @@ function App() {
             <Route exact path="/search" element={<SearchResults />} />
           </Routes>
           <FooterSection />
-        </>
+        </React.Fragment>
       ) : (
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route exact path="*" element={<LoginPage />} />
-          <Route exact path="/login" element={<LoginPage />} />
-          <Route exact path="/signup" element={<SignUpPage />} />
-          <Route
-            exact
-            path="/forgot-password/:token"
-            element={<ForgetPassword />}
-          />
-          <Route exact path="/email-verify" element={<EmailVerifyPage />} />
-        </Routes>
+        <React.Fragment>
+          <NavBar />
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="*" element={<LoginPage />} />
+            <Route exact path="/login" element={<LoginPage />} />
+            <Route exact path="/signup" element={<SignUpPage />} />
+            <Route
+              exact
+              path="/forgot-password/:token"
+              element={<ForgetPassword />}
+            />
+            <Route exact path="/email-verify" element={<EmailVerifyPage />} />
+          </Routes>
+          <FooterSection />
+        </React.Fragment>
       )}
     </>
   );

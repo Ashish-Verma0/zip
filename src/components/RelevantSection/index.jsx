@@ -1,187 +1,10 @@
-// import { useInfiniteQuery } from "@tanstack/react-query";
-// import React, { useEffect, useRef } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { getOneFetchByUrl } from "../../api/Api";
-
-// const RelevantSection = ({ location }) => {
-//   const loaderRef = useRef(null);
-
-//   const {
-//     data: relevantProductsData,
-//     fetchNextPage,
-//     hasNextPage,
-//     isFetchingNextPage,
-//   } = useInfiniteQuery({
-//     queryKey: [
-//       "relevantProducts",
-//       process.env.REACT_APP_SHOP_NAME,
-//       location.state.category.id,
-//     ],
-//     queryFn: async ({ pageParam = 1 }) => {
-//       const response = await getOneFetchByUrl(
-//         `${process.env.REACT_APP_API_URL_LOCAL}/product/all?shopName=${process.env.REACT_APP_SHOP_NAME}&categoryId=${location.state.category.id}&page=${pageParam}`
-//       );
-//       return {
-//         products: response?.data.products || [],
-//         totalPages: response?.data.pagination?.totalPages || 1,
-//         currentPage: pageParam,
-//       };
-//     },
-//     getNextPageParam: (lastPage) =>
-//       lastPage.currentPage < lastPage.totalPages
-//         ? lastPage.currentPage + 1
-//         : undefined,
-//     staleTime: 35 * 60 * 1000,
-//   });
-
-//   useEffect(() => {
-//     const observer = new IntersectionObserver(
-//       (entries) => {
-//         if (entries[0].isIntersecting && hasNextPage) {
-//           fetchNextPage();
-//         }
-//       },
-//       { threshold: 1.0 }
-//     );
-
-//     if (loaderRef.current) {
-//       observer.observe(loaderRef.current);
-//     }
-
-//     return () => {
-//       if (loaderRef.current) observer.unobserve(loaderRef.current);
-//     };
-//   }, [hasNextPage, fetchNextPage]);
-
-//   const navigate = useNavigate();
-
-//   const handleNavigate = (product) => {
-//     navigate(`/detail/${product.id}`, { state: product });
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-//   };
-
-//   return (
-//     <div
-//       className="product-container"
-//       style={{
-//         marginTop: "20px",
-//       }}
-//     >
-//       <div className="container">
-//         {/* Main Product Section */}
-//         <div className="product-box">
-//           <div className="product-main">
-//             <h2 className="title">Popular Product</h2>
-
-//             <div className="product-grid">
-//               {relevantProductsData?.pages.map((page) =>
-//                 page.products.map((product) => (
-//                   <div
-//                     key={product.id}
-//                     className="showcase"
-//                     onClick={() => handleNavigate(product)}
-//                   >
-//                     <div className="showcase-banner">
-//                       <div className="image-wrapper">
-//                         <img
-//                           src={
-//                             product?.productimage[0]?.filename?.startsWith(
-//                               "https"
-//                             )
-//                               ? product?.productimage[0]?.filename
-//                               : `${process.env.REACT_APP_API_URL_LOCAL}/${product?.productimage[0]?.filename}`
-//                           }
-//                           alt={product.title || "Product Image"}
-//                           className="product-img"
-//                           onError={(e) => (e.target.src = "placeholder.png")}
-//                         />
-//                       </div>
-//                       <p className="showcase-badge">
-//                         {process.env.REACT_APP_DISCOUNT}%
-//                       </p>
-//                     </div>
-
-//                     <div className="showcase-content">
-//                       <h3 className="showcase-title">{product.title}</h3>
-//                       <div className="showcase-rating">
-//                         {Array.from({ length: 5 }, (_, starIndex) => (
-//                           <ion-icon
-//                             key={starIndex}
-//                             name={
-//                               starIndex < product.rating
-//                                 ? "star"
-//                                 : "star-outline"
-//                             }
-//                           ></ion-icon>
-//                         ))}
-//                       </div>
-//                       <div className="price-box">
-//                         <p className="price">{product.price}</p>
-//                         <del>
-//                           {process.env.REACT_APP_DISCOUNT * product.price}
-//                         </del>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 ))
-//               )}
-//             </div>
-//             {isFetchingNextPage && <p>Loading more products...</p>}
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Infinite Scroll Loader */}
-//       <div
-//         ref={loaderRef}
-//         style={{ height: "20px", background: "transparent" }}
-//       ></div>
-
-//       {/* Styling */}
-//       <style jsx>{`
-//         .product-grid {
-//           display: grid;
-//           grid-template-columns: repeat(2, 1fr);
-//           gap: 10px;
-//         }
-
-//         @media (min-width: 768px) {
-//           .product-grid {
-//             grid-template-columns: repeat(4, 1fr);
-//           }
-//         }
-
-//         @media (min-width: 600px) and (max-width: 1024px) {
-//           .product-grid {
-//             grid-template-columns: repeat(3, 1fr);
-//           }
-//         }
-
-//         .image-wrapper {
-//           background: white;
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           width: 100%;
-//           height: 200px;
-//         }
-
-//         .product-img {
-//           object-fit: contain;
-//           width: auto;
-//           height: 100%;
-//         }
-//       `}</style>
-//     </div>
-//   );
-// };
-
-// export default RelevantSection;
-
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getOneFetchByUrl } from "../../api/Api";
+import Skeleton from "@mui/material/Skeleton";
+import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
 
 const RelevantSection = ({ location }) => {
   const loaderRef = useRef(null);
@@ -192,7 +15,6 @@ const RelevantSection = ({ location }) => {
     hasNextPage,
     isFetchingNextPage,
     isError,
-    error,
     isLoading,
   } = useInfiniteQuery({
     queryKey: [
@@ -243,44 +65,67 @@ const RelevantSection = ({ location }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError) {
-    return <p>Error: {"No Data Found"}</p>;
-  }
-
-  const isEmpty = relevantProductsData?.pages?.every(
-    (page) => page.products.length === 0
+  const renderSkeletons = () => (
+    <Grid container spacing={2}>
+      {Array.from({ length: 20 }).map((_, index) => (
+        <Grid item xs={6} sm={4} md={3} key={index}>
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={200}
+            animation="wave"
+          />
+          <Skeleton variant="text" width="60%" animation="wave" />
+          <Skeleton variant="text" width="40%" animation="wave" />
+        </Grid>
+      ))}
+    </Grid>
   );
 
   return (
-    <div
-      className="product-container"
-      style={{
-        marginTop: "20px",
-      }}
-    >
+    <div className="product-container" style={{ marginBottom: "80px" }}>
+      <div className="overlay" data-overlay></div>
       <div className="container">
-        {/* Main Product Section */}
         <div className="product-box">
           <div className="product-main">
-            <h2 className="title">Popular Product</h2>
+            <h2 className="title">Popular Products</h2>
 
-            {isEmpty ? (
-              <p>No Data Found</p>
-            ) : (
+            {/* Show Skeleton Loader or Products */}
+            {!relevantProductsData && !isError && (
+              <Grid container spacing={2}>
+                {Array.from({ length: 20 }).map((_, index) => (
+                  <Grid item xs={6} sm={4} md={3} key={index}>
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height={200}
+                      animation="wave"
+                    />
+                    <Skeleton variant="text" width="60%" animation="wave" />
+                    <Skeleton variant="text" width="40%" animation="wave" />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+
+            {isError && (
+              <Typography variant="h6" align="center" color="error" mt={2}>
+                Something went wrong. Please try again later.
+              </Typography>
+            )}
+
+            {relevantProductsData && (
               <div className="product-grid">
-                {relevantProductsData?.pages.map((page) =>
+                {relevantProductsData?.pages.map((page, pageIndex) =>
                   page.products.map((product) => (
                     <div
                       key={product.id}
                       className="showcase"
+                      style={{ cursor: "pointer" }}
                       onClick={() => handleNavigate(product)}
                     >
                       <div className="showcase-banner">
-                        <div className="image-wrapper">
+                        <div className="image-container">
                           <img
                             src={
                               product?.productimage[0]?.filename?.startsWith(
@@ -299,8 +144,27 @@ const RelevantSection = ({ location }) => {
                         </p>
                       </div>
 
-                      <div className="showcase-content">
-                        <h3 className="showcase-title">{product.title}</h3>
+                      <div
+                        className="showcase-content"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {product.category.categoryName}
+
+                        <h3
+                          className="showcase-title"
+                          style={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {product.title}
+                        </h3>
+
                         <div className="showcase-rating">
                           {Array.from({ length: 5 }, (_, starIndex) => (
                             <ion-icon
@@ -313,11 +177,10 @@ const RelevantSection = ({ location }) => {
                             ></ion-icon>
                           ))}
                         </div>
+
                         <div className="price-box">
                           <p className="price">{product.price}</p>
-                          <del>
-                            {process.env.REACT_APP_DISCOUNT * product.price}
-                          </del>
+                          <del>{product.price}</del>
                         </div>
                       </div>
                     </div>
@@ -325,24 +188,14 @@ const RelevantSection = ({ location }) => {
                 )}
               </div>
             )}
-
-            {isFetchingNextPage && <p>Loading more products...</p>}
           </div>
         </div>
       </div>
-
-      {/* Infinite Scroll Loader */}
-      <div
-        ref={loaderRef}
-        style={{ height: "20px", background: "transparent" }}
-      ></div>
-
-      {/* Styling */}
       <style jsx>{`
         .product-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
+          gap: 20px;
         }
 
         @media (min-width: 768px) {
@@ -357,18 +210,45 @@ const RelevantSection = ({ location }) => {
           }
         }
 
-        .image-wrapper {
-          background: white;
+        .showcase-banner {
+          position: relative;
+          height: 200px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #f5f5f5;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+
+        .product-img {
+          height: 100%;
+          // object-fit: contain;
+          transition: transform 0.3s ease-in-out;
+        }
+
+        del {
+          font-size: 0.9rem;
+          color: #999;
+        }
+
+        .image-container {
+          background-color: rgba(
+            255,
+            255,
+            255,
+            0.5
+          ); /* Semi-transparent background */
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 100%;
+          overflow: hidden;
           height: 200px;
         }
 
         .product-img {
-          object-fit: contain;
-          width: auto;
+          object-fit: contain; /* Ensure the full image is visible */
+          width: 100%;
           height: 100%;
         }
       `}</style>

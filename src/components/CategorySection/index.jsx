@@ -3,11 +3,12 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFetch } from "../../api/Api";
 import { StoreContext } from "../../useContext/Context";
+import Skeleton from "@mui/material/Skeleton";
 
 const CategorySection = () => {
   const navigate = useNavigate();
 
-  const { setSubCategory, subCategory } = useContext(StoreContext);
+  const { setSubCategory } = useContext(StoreContext);
   const {
     data: categories = [],
     isLoading,
@@ -31,14 +32,37 @@ const CategorySection = () => {
     <div className="category">
       <div className="container">
         <div className="category-item-container has-scrollbar">
-          {categories.length ? (
+          {isLoading || !categories.length ? (
+            <>
+              {[...Array(4)].map((_, index) => (
+                <div className="category-item" key={index}>
+                  <div className="category-img-box">
+                    <Skeleton variant="rectangular" width={30} height={30} />
+                  </div>
+
+                  <div className="category-content-box">
+                    <div className="category-content-flex">
+                      <Skeleton variant="text" width={150} />
+                    </div>
+                    <div className="category-btn">
+                      <Skeleton variant="text" width={100} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
             categories.map((category) => (
               <div className="category-item" key={category.id}>
                 <div className="category-img-box">
                   <img
                     src={`${process.env.REACT_APP_API_URL_LOCAL}/${category.categoryLogo.filename}`}
                     alt={category.categoryName}
-                    width="30"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      objectFit: "cover",
+                    }}
                   />
                 </div>
 
@@ -47,7 +71,7 @@ const CategorySection = () => {
                     <h3 className="category-item-title">
                       {category.categoryName}
                     </h3>
-                    <p className="category-item-amount">({category.amount})</p>
+                    <p className="category-item-amount">(2)</p>
                   </div>
 
                   <div
@@ -60,8 +84,6 @@ const CategorySection = () => {
                 </div>
               </div>
             ))
-          ) : (
-            <> No Categories Found</>
           )}
         </div>
       </div>

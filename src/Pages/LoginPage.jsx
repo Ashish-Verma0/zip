@@ -1,18 +1,17 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { postFetchData } from "../api/Api";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import loginAnimation from "../animation/loginAnimation.gif";
 import {
-  TextField,
-  Button,
   Typography,
-  Grid,
-  Container,
-  Box,
   Checkbox,
   FormControlLabel,
+  Box,
+  Skeleton,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { postFetchData } from "../api/Api";
+import "./style.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,10 +20,18 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
+  const [rememberMe, setRememberMe] = useState(false);
+  const [passwordType, setPasswordType] = useState("password");
   const [error, setError] = useState("");
 
-  // Using React Query's useMutation for login
+  const togglePassword = () => {
+    setPasswordType(passwordType === "password" ? "text" : "password");
+  };
+
+  const handleRememberMe = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
   const mutation = useMutation({
     mutationFn: async (loginData) => {
       const response = await postFetchData(
@@ -33,13 +40,15 @@ const LoginPage = () => {
       );
       return response;
     },
-
     onSuccess(data) {
       if (data.success) {
         toast("Login successfully");
         setHide(false);
         localStorage.setItem("token", JSON.stringify(data));
         localStorage.setItem("tokenData", JSON.stringify(data.token));
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", JSON.stringify(data));
+        }
         navigate("/");
         window.location.reload();
       } else {
@@ -47,7 +56,6 @@ const LoginPage = () => {
         setError(data.message || "Login failed");
       }
     },
-
     onError() {
       setHide(false);
       setError("Invalid Credentials");
@@ -56,156 +64,119 @@ const LoginPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setData({ ...data, [name]: value });
-
-    if (error) setError(""); // Clear error message on input change
+    if (error) setError("");
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
     setHide(true);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!data.email || !data.password) {
       setError("Please enter both email and password.");
+      setHide(false);
       return;
     }
+
+    if (!emailRegex.test(data.email)) {
+      setError("Please enter a valid email.");
+      setHide(false);
+      return;
+    }
+
     mutation.mutate(data);
   };
+  const [loading, setLoading] = useState(true);
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        // backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Box
-        sx={{
-          background: "#fff",
-          padding: { xs: 2, md: 4 },
-          borderRadius: "12px",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
-          width: "100%",
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            textAlign: "center",
-            fontWeight: "700",
-            color: "#333",
-            marginBottom: 2,
-          }}
-        >
-          Welcome Back!
-        </Typography>
-        <Typography
-          sx={{ textAlign: "center", color: "#666", marginBottom: 3 }}
-        >
-          Please sign in to your account and start your adventure.
-        </Typography>
-
-        {error && (
-          <Typography
-            color="error"
-            variant="body2"
-            align="center"
-            sx={{ marginBottom: 2 }}
-          >
-            {error}
-          </Typography>
-        )}
-
-        <form onSubmit={handleLogin}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            name="email"
-            value={data.email}
-            onChange={handleChange}
-            required
-            sx={{ marginBottom: 2 }}
-          />
-
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
-            type="password"
-            value={data.password}
-            onChange={handleChange}
-            name="password"
-            required
-            sx={{ marginBottom: 2 }}
-          />
-
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ marginBottom: 2 }}
-          >
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Remember me"
+    <div className="main-loginContainer">
+      <div className="login-container">
+        <div className="login-card">
+          <h1 className="d-flex justify-content-center align-items-center">
+            Welcome Back
+          </h1>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            {loading && (
+              <Skeleton variant="circular" width={120} height={120} />
+            )}
+            <img
+              src={loginAnimation}
+              alt="Sign Up"
+              onLoad={() => setLoading(false)}
             />
-            <a
-              href="/email-verify"
+          </Box>
+          <form onSubmit={handleLogin}>
+            <div className="input-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={data.email}
+                onChange={handleChange}
+                placeholder="Email"
+                required
+              />
+            </div>
+            <div className="input-group password-group">
+              <input
+                type={passwordType}
+                id="password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                placeholder="Password"
+                required
+              />
+              <span className="eye-icon" onClick={togglePassword}>
+                {passwordType === "password" ? "🙈" : "👁️"}
+              </span>
+            </div>
+            {error && (
+              <Typography className="error-message">{error}</Typography>
+            )}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={handleRememberMe}
+                  color="primary"
+                />
+              }
+              label="Remember Me"
+            />
+            <button type="submit" className="login-button" disabled={hide}>
+              {hide ? "Logging In..." : "LOGIN"}
+            </button>
+          </form>
+          <p className="signup-text">
+            <spam className="d-flex justify-content-center align-items-center">
+              Don't have an account?&nbsp;
+              <Link
+                to="/signup"
+                style={{
+                  textDecoration: "none",
+                  color: "#4facfe",
+                  fontWeight: "600",
+                }}
+              >
+                Sign Up
+              </Link>
+            </spam>
+            <Link
+              to="/email-verify"
               style={{
-                color: "#2575fc",
                 textDecoration: "none",
-                fontWeight: "500",
+                color: "#4facfe",
+                fontWeight: "600",
               }}
             >
-              Forgot Password?
-            </a>
-          </Grid>
-
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={hide ? true : false}
-            sx={{
-              backgroundColor: "#2575fc",
-              color: "#fff",
-              width: "100%",
-              "&:hover": {
-                backgroundColor: "#1e5ecc",
-              },
-              marginTop: 3,
-              paddingY: 1.5,
-              fontWeight: "600",
-              fontSize: "1rem",
-              borderRadius: "8px",
-              textTransform: "none",
-            }}
-          >
-            Login
-          </Button>
-        </form>
-
-        <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
-          <Typography variant="body2" sx={{ color: "#666" }}>
-            New on our platform?{" "}
-            <a
-              href="/signup"
-              style={{
-                color: "#2575fc",
-                textDecoration: "none",
-                fontWeight: "500",
-              }}
-            >
-              Create an account
-            </a>
-          </Typography>
-        </Grid>
-      </Box>
-    </Container>
+              Forgot Password
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
